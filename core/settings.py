@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'bulletin',
     'federal',
     'officerprofileinfos',
+    'alert',
+    'guidecourse',
+    'galleries',
 ]
 
 MIDDLEWARE = [

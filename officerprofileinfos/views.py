@@ -5,8 +5,9 @@ from officerprofileinfos.serializers import OfficerSerializer, DesignationSerial
 from officerprofileinfos.pagination import PaginationClass
 # Create your views here.
 
-
 # councilcommitieview
+
+
 class CouncilCommittieView(generics.ListAPIView):
     queryset = Designation.objects.filter(is_executive_committee=True)
     serializer_class = OfficerSerializer
