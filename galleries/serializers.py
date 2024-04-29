@@ -1,16 +1,30 @@
 from rest_framework import serializers
-from galleries.models import Gallery, DisplayImage
+from .models import Gallery, GalleryImage, VideoGallery
 
 
-class GallerySerializer(serializers.ModelSerializer):
+class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Gallery
+        model = GalleryImage
         fields = '__all__'
 
 
-class DisplayImageSerializer(serializers.ModelSerializer):
-    other_images = GallerySerializer(many=True)
+class GallerySerializer(serializers.ModelSerializer):
+    images = GalleryImageSerializer(many=True)
 
     class Meta:
-        model = DisplayImage
+        model = Gallery
+        fields = ['id', 'title', 'title_ne', 'image', 'images']
+
+
+class GalleryDetailSerializer(serializers.ModelSerializer):
+    images = GalleryImageSerializer(many=True)
+
+    class Meta:
+        model = Gallery
+        fields = ['id', 'title', 'title_ne', 'image', 'images']
+
+
+class VideoGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoGallery
         fields = '__all__'

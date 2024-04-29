@@ -19,6 +19,9 @@ class Introduction(models.Model):
     content = models.TextField()
     content_ne = models.TextField()
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class WardDocument(models.Model):
     id = models.AutoField(primary_key=True)
@@ -33,6 +36,9 @@ class WardDocument(models.Model):
         self.file_extension = extension
         super().save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return self.filename
+
 
 class FrequentlyAskedQuestions(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,3 +46,20 @@ class FrequentlyAskedQuestions(models.Model):
     question_ne = models.TextField()
     answer = models.TextField()
     answer_ne = models.TextField()
+
+    def __str__(self) -> str:
+        return self.question
+
+
+class Page(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.TextField()
+    title_ne = models.TextField()
+    featured_image = models.ImageField(
+        upload_to='uploads/page/featured_image', null=True, blank=True)
+    description = models.TextField()
+    description_ne = models.TextField()
+    slug = models.SlugField()
+
+    def __str__(self) -> str:
+        return self.title

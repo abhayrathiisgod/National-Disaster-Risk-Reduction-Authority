@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from importantcontacts.models import ProvinceWiseFocalPersonContactList, DeocHeadList, LocalDisasterManagementContactList, MohaSubordinateList, MohaPhoneDirectoryList
+from importantcontacts.models import ProvinceWiseFocalPersonContactList, DeocHeadList, LocalDisasterManagementContactList, MohaSubordinateList, MohaPhoneDirectoryList, SnakeBites, EmergencyVehicle
+from federal.serializers import DistrictSerializer, ProvinceSerializer, MunicipalitySerializer, WardSerializer
 
 
 class ProvinceWiseFocalPersonContactSerializer(serializers.ModelSerializer):
@@ -30,3 +31,31 @@ class MohaPhoneDirectorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MohaPhoneDirectoryList
         fields = '__all__'
+
+
+class SnakeBiteSerializer(serializers.ModelSerializer):
+    district = DistrictSerializer()
+
+    class Meta:
+        model = SnakeBites
+        fields = ['id', 'treatment_centre', 'treatment_centre_ne', 'district']
+
+
+class AmbulanceSerializer(serializers.ModelSerializer):
+    district = DistrictSerializer()
+    # municipality = MunicipalitySerializer()
+
+    class Meta:
+        model = EmergencyVehicle
+        fields = ['id', 'vehicle_type', 'ownership', 'ownership_ne', 'vechicle_no', 'vechicle_no_ne', 'driver_name',
+                  'driver_name_ne', 'contact', 'alt_contact', 'condition', 'province', 'district', 'municipality']
+
+
+class FireTruckSerializer(serializers.ModelSerializer):
+    district = DistrictSerializer()
+    # municipality = MunicipalitySerializer()
+
+    class Meta:
+        model = EmergencyVehicle
+        fields = ['id', 'vehicle_type', 'ownership', 'ownership_ne', 'vechicle_no', 'vechicle_no_ne', 'driver_name',
+                  'driver_name_ne', 'contact', 'alt_contact', 'condition', 'province', 'district', 'municipality']

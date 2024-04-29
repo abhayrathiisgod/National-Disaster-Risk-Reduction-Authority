@@ -1,24 +1,32 @@
 from django.db import models
 
-# Create your models here.
-
 
 class Gallery(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
-    photo_credit = models.CharField(max_length=255)
-    photo_credit_ne = models.CharField(max_length=255)
-    caption = models.TextField()
-    caption_ne = models.TextField()
-    image = models.ImageField(upload_to='uploads/gallery')
+    image = models.ImageField(upload_to='uploads/gallery/display_image/')
 
-# main display Image is the class below
+    def __str__(self):
+        return self.title
 
 
-class DisplayImage(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    title_ne = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='uploads/display_image')
-    other_images = models.ManyToManyField(Gallery)
+class GalleryImage(models.Model):
+    gallery = models.ForeignKey(
+        Gallery, on_delete=models.CASCADE, related_name='images')
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    title_ne = models.CharField(max_length=255, blank=True, null=True)
+    photo_credit = models.CharField(max_length=255, blank=True, null=True)
+    photo_credit_ne = models.CharField(max_length=255, blank=True, null=True)
+    caption = models.TextField(blank=True, null=True)
+    caption_ne = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/gallery/')
+
+    def __str__(self):
+        return f"Image {self.id} of {self.gallery.title}"
+
+
+class VideoGallery(models.Model):
+    id = models.IntegerField(primary_key=True)
+    youtube_url = models.URLField()

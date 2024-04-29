@@ -1,0 +1,32 @@
+from django.urls import path
+from .views import (DecisionCircularDirectivePublicationListView,
+                    RulesAndRegulationsPublicationListView,
+                    PoliciesAndDirectoriesPublicationListView,
+                    ReportPublicationListView,
+                    ProcedurePublicationListView,
+                    PlanPublicationListView,
+                    ArticlesPublicationListView,
+                    CriteriaPublicationListView,
+                    MeetingReportPublicationListView,
+                    TenderPublicationListView,
+                    PublicationDetailView,
+                    Allpublicationview)
+
+urlpatterns = [
+    path('decision_circular_directive/', DecisionCircularDirectivePublicationListView.as_view(),
+         name='decision_circular_directive'),
+    path('rules_and_regulations/', RulesAndRegulationsPublicationListView.as_view(),
+         name='rules_and_regulations'),
+    path('policies_and_directories/', PoliciesAndDirectoriesPublicationListView.as_view(),
+         name='policies_and_directories'),
+    path('report/', ReportPublicationListView.as_view(), name='report'),
+    path('procedure/', ProcedurePublicationListView.as_view(), name='procedure'),
+    path('plan/', PlanPublicationListView.as_view(), name='plan'),
+    path('articles/', ArticlesPublicationListView.as_view(), name='articles'),
+    path('criteria/', CriteriaPublicationListView.as_view(), name='criteria'),
+    path('meeting_report/', MeetingReportPublicationListView.as_view(),
+         name='meeting_report'),
+    path('tender/', TenderPublicationListView.as_view(), name='tender'),
+    path('<int:pk>/', PublicationDetailView.as_view(), name='publication_detail'),
+    path('', Allpublicationview.as_view(), name='all_publications'),
+]

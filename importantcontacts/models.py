@@ -71,3 +71,40 @@ class LocalDisasterManagementContactList(models.Model):
     district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
     municcipality = models.ForeignKey(
         Municipality, on_delete=models.DO_NOTHING)
+
+# snake bitess
+
+
+class SnakeBites(models.Model):
+    id = models.AutoField(primary_key=True)
+    treatment_centre = models.CharField(max_length=255)
+    treatment_centre_ne = models.CharField(max_length=255)
+    district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+
+
+class EmergencyVehicle(models.Model):
+    id = models.AutoField(primary_key=True)
+    type = (
+        ('Ambulance', 'Ambulance'),
+        ('Fire_truck', 'Fire_truck'),
+        ('Police_vehicle', 'Police_vehicle'),
+    )
+    vehicle_type = models.CharField(max_length=255, choices=type)
+    ownership = models.CharField(max_length=255, blank=True)
+    ownership_ne = models.CharField(max_length=255, blank=True)
+    vechicle_no = models.CharField(max_length=255, blank=True)
+    vechicle_no_ne = models.CharField(max_length=255, blank=True)
+    driver_name = models.CharField(max_length=255, blank=True)
+    driver_name_ne = models.CharField(max_length=255, blank=True)
+    contact = models.CharField(max_length=255, blank=True)
+    alt_contact = models.CharField(max_length=255, blank=True)
+    condition = models.TextField()
+    province = models.ForeignKey(
+        Province, on_delete=models.DO_NOTHING, blank=True)
+    district = models.ForeignKey(
+        District, on_delete=models.DO_NOTHING, blank=True)
+    municipality = models.ForeignKey(
+        Municipality, on_delete=models.DO_NOTHING, blank=True)
+
+    def __str__(self):
+        return self.vehicle_type

@@ -1,18 +1,37 @@
 from rest_framework import serializers
-from guidecourse.models import GuideCourse, GuideChildren
+from .models import GuideCourse, Guidechildren, Course
 
 
-class GuideChildrenSerializer(serializers.ModelSerializer):
+class GuidechildrenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GuideChildren
-        fields = ['id', 'name', 'name_ne', 'title',
-                  'title_ne', 'description', 'description_ne']
+        model = Guidechildren
+        fields = ['id', 'name', 'name_ne', 'title', 'title_ne',
+                  'description', 'description_ne', 'image']
+
+
+class GuideListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuideCourse
+        fields = ['id', 'title', 'title_ne', 'image']
 
 
 class GuideCourseSerializer(serializers.ModelSerializer):
-    children = GuideChildrenSerializer(many=True, read_only=True)
+    more_detail = GuidechildrenSerializer(many=True, read_only=True)
 
     class Meta:
         model = GuideCourse
         fields = ['id', 'name', 'title', 'title_ne',
-                  'description', 'description_ne', 'image', 'children']
+                  'description', 'description_ne', 'image', 'more_detail']
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'title_ne', 'image',
+                  'skill_level', ]
+
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'

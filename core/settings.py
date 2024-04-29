@@ -42,10 +42,13 @@ INSTALLED_APPS = [
     'importantcontacts',
     'bulletin',
     'federal',
-    'officerprofileinfos',
     'alert',
     'guidecourse',
     'galleries',
+    'website',
+    'pressnotenews',
+    'trainingprojects',
+    'publication',
 ]
 
 MIDDLEWARE = [

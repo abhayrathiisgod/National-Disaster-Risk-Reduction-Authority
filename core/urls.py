@@ -25,7 +25,12 @@ urlpatterns = [
     path('api/v1/importantcontacts/', include('importantcontacts.urls')),
     path('api/v1/bulletin/', include('bulletin.urls')),
     path('api/v1/federal/', include('federal.urls')),
-    path('api/v1/officerprofileinfos/', include('officerprofileinfos.urls')),
+    path('api/v1/pressnotenews/', include('pressnotenews.urls')),
+    path('api/v1/guidecourse/', include('guidecourse.urls')),
+    path('api/v1/galleries/', include('galleries.urls')),
+    path('api/v1/trainingprojects/', include('trainingprojects.urls')),
+    path('api/v1/website/', include('website.urls')),
+    path('api/v1/publications/', include('publication.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
