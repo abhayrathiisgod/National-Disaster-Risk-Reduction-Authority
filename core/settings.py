@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'publication',
     'hazard',
     'incident',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

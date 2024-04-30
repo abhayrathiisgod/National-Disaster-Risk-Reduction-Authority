@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from federal.models import Province, District, Municipality
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class Address(models.Model):

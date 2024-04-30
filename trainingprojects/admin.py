@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Address, Donater, Project, Training
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class AddressAdmin(admin.ModelAdmin):

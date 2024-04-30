@@ -3,6 +3,8 @@ from rest_framework import generics
 from .serializers import ProjectDetailSerializer, ProjectListSerializer, TrainingAnalyticsSerializer, TrainingSerializer
 from .models import Project, Training
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 # Create your views here.
 
@@ -24,6 +26,8 @@ class TrainingView(generics.ListAPIView):
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['province', 'district', 'municipality']
 
 
 class TrainingAnalyticView(generics.ListAPIView):
