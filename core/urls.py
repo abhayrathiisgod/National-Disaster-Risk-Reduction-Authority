@@ -31,6 +31,9 @@ urlpatterns = [
     path('api/v1/trainingprojects/', include('trainingprojects.urls')),
     path('api/v1/website/', include('website.urls')),
     path('api/v1/publications/', include('publication.urls')),
+    # path('api/v1/alert/', include('alert.urls')),
+    path('api/v1/hazards/', include('hazard.urls')),
+    path('api/v1/incidents/', include('incident.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

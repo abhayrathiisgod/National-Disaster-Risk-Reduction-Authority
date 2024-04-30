@@ -9,30 +9,30 @@ class ProvinceSerializer(serializers.ModelSerializer):
 
 
 class DistrictSerializer(serializers.ModelSerializer):
-    province = ProvinceSerializer()  # Correct field name
+    province = ProvinceSerializer()
 
     class Meta:
         model = District
         fields = ['id', 'district_name', 'district_name_ne',
-                  'code', 'province']  # Correct field name
+                  'code', 'province']
 
 
 class MunicipalitySerializer(serializers.ModelSerializer):
-    province = ProvinceSerializer(read_only=True)  # Correct field name
-    district = DistrictSerializer(read_only=True)  # Correct field name
+    province = ProvinceSerializer(read_only=True)
+    district = DistrictSerializer(read_only=True)
 
     class Meta:
         model = Municipality
         fields = ['id', 'municipality_name', 'municipality_name_ne',
-                  'code', 'province', 'district']  # Correct field names
+                  'code', 'province', 'district']
 
 
 class WardSerializer(serializers.ModelSerializer):
-    province = ProvinceSerializer()  # Correct field name
-    district = DistrictSerializer()  # Correct field name
-    municipality = MunicipalitySerializer()  # Correct field name
+    province = ProvinceSerializer()
+    district = DistrictSerializer()
+    municipality = MunicipalitySerializer()
 
     class Meta:
         model = Ward
         fields = ['id', 'ward_name', 'ward_name_ne', 'province',
-                  'district', 'municipality']  # Correct field names
+                  'district', 'municipality']

@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import Page, Introduction, ContactDetail, WardDocument, FrequentlyAskedQuestions
-from .serializers import PageSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer
-
+from .models import Page, Introduction, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu
+from .serializers import PageSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, BookmarksSerializer, MenuSerializer
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -55,3 +56,32 @@ class PageView(generics.ListAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     pagination_class = None
+
+
+class BookmarksView(generics.ListAPIView):
+    queryset = Bookmarks.objects.all()
+    serializer_class = BookmarksSerializer
+    pagination_class = None
+
+
+class BookmarksDetailView(generics.RetrieveAPIView):
+    queryset = Bookmarks.objects.all()
+    serializer_class = BookmarksSerializer
+    pagination_class = None
+    lookup_field = 'pk'
+
+
+class MenuViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return Menu.objects.filter(children__isnull=False).distinct()
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = MenuSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = self.get_queryset()
+        menuuu = get_object_or_404(queryset, id=pk)
+        serializer = MenuSerializer(menuuu)
+        return Response(serializer.data)

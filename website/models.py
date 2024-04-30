@@ -1,4 +1,5 @@
 from django.db import models
+from publication.models import Publications
 import os
 
 
@@ -63,3 +64,30 @@ class Page(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class Bookmarks(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.TextField()
+    name_ne = models.TextField()
+    link = models.URLField()
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Menu(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.TextField()
+    name_ne = models.TextField()
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
+
+    link = models.CharField(max_length=100, null=True, blank=True)
+    is_external_link = models.BooleanField(default=False)
+    content_source = models.ForeignKey(
+        Publications, on_delete=models.CASCADE, null=True, blank=True)
+    page = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.name

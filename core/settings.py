@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'pressnotenews',
     'trainingprojects',
     'publication',
+    'hazard',
+    'incident',
 ]
 
 MIDDLEWARE = [

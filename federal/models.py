@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import Max
-from django.contrib.gis.db import models
 # Create your models here.
 
 
