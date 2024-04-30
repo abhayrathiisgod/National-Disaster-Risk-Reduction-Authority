@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from federal.models import Province, District
+from federal.models import Province, District, Municipality
 
 
 class Address(models.Model):
@@ -45,6 +45,26 @@ class Project(models.Model):
     updated_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True, related_name='updated_projects')
     district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Training(models.Model):
+    id = models.AutoField(primary_key=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    title_ne = models.CharField(max_length=255)
+    startDate = models.DateField(blank=True, null=True)
+    endDate = models.DateField(blank=True, null=True)
+    num_of_participants = models.IntegerField()
+    description = models.TextField()
+    description = models.TextField()
+    attendants = models.CharField(max_length=255, blank=True, null=True)
+    province = models.ForeignKey(Province, on_delete=models.DO_NOTHING)
+    district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+    municipality = models.ForeignKey(
+        Municipality, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title

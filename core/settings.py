@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'importantcontacts',
     'bulletin',
     'federal',
-    'alert',
+    'Alerts',
     'guidecourse',
     'galleries',
     'website',

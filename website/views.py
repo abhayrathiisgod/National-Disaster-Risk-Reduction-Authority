@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import Page, Introduction, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu
-from .serializers import PageSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, BookmarksSerializer, MenuSerializer
+from .models import Page, Introduction, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu
+from .serializers import PageSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, BookmarksSerializer, MenuSerializer
 from rest_framework.response import Response
 # Create your views here.
 
@@ -56,6 +56,11 @@ class PageView(generics.ListAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     pagination_class = None
+
+
+class ContactListView(generics.ListCreateAPIView):
+    queryset = ContactForm.objects.all()
+    serializer_class = ContactSerializer
 
 
 class BookmarksView(generics.ListAPIView):

@@ -30,3 +30,6 @@ class GalleryImage(models.Model):
 class VideoGallery(models.Model):
     id = models.IntegerField(primary_key=True)
     youtube_url = models.URLField()
+
+    def __str__(self) -> str:
+        return self.id

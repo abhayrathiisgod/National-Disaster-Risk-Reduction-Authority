@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from .models import ContactDetail, Introduction, WardDocument, FrequentlyAskedQuestions, Page, Bookmarks, Menu
+from .models import ContactDetail, Introduction, WardDocument, ContactForm, FrequentlyAskedQuestions, Page, Bookmarks, Menu
 
 
 class ContactDetailSerializer(serializers.ModelSerializer):
@@ -55,3 +55,9 @@ class MenuSerializer(serializers.ModelSerializer):
 class MenuViewSet(viewsets.ModelViewSet):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactForm
+        fields = '__all__'

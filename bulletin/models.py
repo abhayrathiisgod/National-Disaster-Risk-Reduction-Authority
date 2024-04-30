@@ -26,7 +26,6 @@ def get_upload_path_bulletin(instance, filename):
 
 
 class Bulletin(models.Model):
-    # ??
     bulletin_author = models.ForeignKey(
         BulletinAuthor, on_delete=models.DO_NOTHING)
     bulletin_type = models.ForeignKey(
@@ -36,7 +35,9 @@ class Bulletin(models.Model):
     summary = models.TextField()
     summary_ne = models.TextField()
     date = models.DateField(auto_now_add=True)
-    # fix url
+    description = models.TextField()
+    description_ne = models.TextField()
+    file = models.FileField(upload_to='uploads/bulletin/files/')
     image = models.ImageField(upload_to=get_upload_path_bulletin)
 
     def __str__(self) -> str:

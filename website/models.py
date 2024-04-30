@@ -8,6 +8,9 @@ class ContactDetail(models.Model):
     detail = models.TextField()
     detail_ne = models.TextField()
 
+    def __str__(self) -> str:
+        return self.detail
+
 
 class Introduction(models.Model):
     id = models.AutoField(primary_key=True)
@@ -91,3 +94,14 @@ class Menu(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class ContactForm(models.Model):
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.full_name
