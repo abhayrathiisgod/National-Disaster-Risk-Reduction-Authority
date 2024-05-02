@@ -24,7 +24,7 @@ class MunicipalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Municipality
         fields = ['id', 'municipality_name', 'municipality_name_ne',
-                  'code', 'province', 'district']
+                  'province', 'district']
 
 
 class WardSerializer(serializers.ModelSerializer):

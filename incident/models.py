@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from federal.models import Ward
 from django.contrib.auth.models import User
@@ -56,8 +57,8 @@ class Incident(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     point = models.CharField(max_length=255)
-    createdOn = models.DateTimeField()
-    modifiedOn = models.DateTimeField()
+    createdOn = models.DateTimeField(default=timezone.now())
+    modifiedOn = models.DateTimeField(default=timezone.now())
     titleNe = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     cause = models.TextField(null=True, blank=True)
@@ -74,8 +75,32 @@ class Incident(models.Model):
     regionId = models.IntegerField(null=True, blank=True)
     dataSourceId = models.IntegerField()
     dataSource = models.CharField(max_length=255)
-    source = models.CharField(max_length=255)
-    event = models.CharField(max_length=255, null=True, blank=True)
+    source_TYPES = [
+        ('Nepal_police', 'Nepal_police'),
+        ('Initial Rapid Assessment', 'Initial_Rapid_Assessment'),
+        ('Other', 'Other'),
+
+    ]
+    source = models.CharField(choices=source_TYPES, null=True, blank=True)
+    DISASTER_TYPES = [
+        ('Earthquake', 'Earthquake'),
+        ('Hurricane', 'Hurricane'),
+        ('Tornado', 'Tornado'),
+        ('Flood', 'Flood'),
+        ('Wildfire', 'Wildfire'),
+        ('Tsunami', 'Tsunami'),
+        ('Volcanic eruption', 'Volcanic eruption'),
+        ('Landslide', 'Landslide'),
+        ('Drought', 'Drought'),
+        ('Blizzard', 'Blizzard'),
+        ('Heatwave', 'Heatwave'),
+        ('Avalanche', 'Avalanche'),
+        ('Cyclone', 'Cyclone'),
+        ('Thunderstorm', 'Thunderstorm'),
+        ('Hailstorm', 'Hailstorm'),
+    ]
+
+    event = models.CharField(choices=DISASTER_TYPES, null=True, blank=True)
     hazard = models.ForeignKey(Hazards, on_delete=models.DO_NOTHING)
     loss = models.ForeignKey(
         Loss, on_delete=models.CASCADE, null=True, blank=True)

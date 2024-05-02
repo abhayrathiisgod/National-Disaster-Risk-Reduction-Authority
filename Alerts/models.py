@@ -8,7 +8,7 @@ from django.utils.timezone import now
 class AlertList(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
-    wards = models.ForeignKey(Ward, on_delete=models.DO_NOTHING, default=1)
+    wards = models.ForeignKey(Ward, on_delete=models.DO_NOTHING, default=101)
     point = models.CharField()
     createdOn = models.DateTimeField(default=now)
     titleNe = models.CharField(max_length=255)
@@ -29,7 +29,25 @@ class AlertList(models.Model):
     updatedBy = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='%(class)s_updated', null=True, blank=True)
     hazard = models.ForeignKey(Hazards, on_delete=models.DO_NOTHING)
-    event = models.CharField(max_length=255, null=True, blank=True)
+    DISASTER_TYPES = [
+        ('Earthquake', 'Earthquake'),
+        ('Hurricane', 'Hurricane'),
+        ('Tornado', 'Tornado'),
+        ('Flood', 'Flood'),
+        ('Wildfire', 'Wildfire'),
+        ('Tsunami', 'Tsunami'),
+        ('Volcanic eruption', 'Volcanic eruption'),
+        ('Landslide', 'Landslide'),
+        ('Drought', 'Drought'),
+        ('Blizzard', 'Blizzard'),
+        ('Heatwave', 'Heatwave'),
+        ('Avalanche', 'Avalanche'),
+        ('Cyclone', 'Cyclone'),
+        ('Thunderstorm', 'Thunderstorm'),
+        ('Hailstorm', 'Hailstorm'),
+    ]
+
+    event = models.CharField(choices=DISASTER_TYPES, null=True, blank=True)
 
     def __str__(self):
         return self.title

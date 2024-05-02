@@ -41,7 +41,7 @@ class PublicationAuthorAdmin(admin.ModelAdmin):
 
 class PublicationsAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ('id', 'title', 'date', 'is_published')
+    list_display = ('id', 'pub_type', 'title', 'date', 'is_published')
     list_display_links = ('id', 'title', 'date', 'is_published')
     list_filter = ('id', 'date', 'is_published',)
     search_fields = ('title',)

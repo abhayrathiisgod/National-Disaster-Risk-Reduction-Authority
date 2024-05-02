@@ -5,13 +5,13 @@ from bulletin.models import Bulletin, BulletinAuthor, BulletinType
 class BulletinAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = BulletinAuthor
-        fields = '__all__'
+        fields = ['id', 'author', 'author_ne']
 
 
 class BulletinTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = BulletinType
-        fields = '__all__'
+        fields = ['id', 'bulletin_type', 'bulletin_type_ne']
 
 
 class BulletinSerializer(serializers.ModelSerializer):

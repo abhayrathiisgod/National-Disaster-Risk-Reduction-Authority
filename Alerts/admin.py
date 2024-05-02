@@ -11,7 +11,7 @@ class AlertListAdmin(admin.ModelAdmin):
                    'region', 'regionId', 'hazard')
     list_display_links = ('id', 'title', 'source', 'verified', 'public',
                           'region', 'regionId', 'hazard')
-    readonly_fields = ('createdBy', 'startedOn', 'expireOn')
+    readonly_fields = ('createdBy', 'expireOn')
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:

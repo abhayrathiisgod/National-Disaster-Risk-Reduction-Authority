@@ -105,3 +105,10 @@ class ContactForm(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class HomePageBanner(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    title_ne = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='uploads/homepage/banner')

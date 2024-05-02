@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class OfficerprofileinfosConfig(AppConfig):
+class NationalbipadalertsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "officerprofileinfos"
+    name = "nationalbipadalerts"

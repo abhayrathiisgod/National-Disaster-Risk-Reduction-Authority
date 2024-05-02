@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from .models import ContactDetail, Introduction, WardDocument, ContactForm, FrequentlyAskedQuestions, Page, Bookmarks, Menu
+from .models import HomePageBanner, ContactDetail, Introduction, WardDocument, ContactForm, FrequentlyAskedQuestions, Page, Bookmarks, Menu
 
 
 class ContactDetailSerializer(serializers.ModelSerializer):
@@ -60,4 +60,10 @@ class MenuViewSet(viewsets.ModelViewSet):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactForm
+        fields = '__all__'
+
+
+class HomePageBannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomePageBanner
         fields = '__all__'

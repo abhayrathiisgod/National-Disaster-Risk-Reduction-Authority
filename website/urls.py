@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import PageView, ContactListView, FrequentlyAskedQuestionsView, FrequentlyAskedQuestionsDetailView, WardDocumentView, WardDocumentDetailView, ContactDetailView, IntroductionView, IntroductionDetailView, BookmarksView, BookmarksDetailView, MenuViewSet
 urlpatterns = [
     path('pages/national-platform-of-disaster-risk-re/', PageView.as_view()),
@@ -14,4 +15,6 @@ urlpatterns = [
     path('menu/', MenuViewSet.as_view({'get': 'list'})),
     path('menu/<int:pk>/', MenuViewSet.as_view({'get': 'retrieve'})),
     path('contacts/', ContactListView.as_view(), name='contact-list'),
+    path('homepagebanner/', views.HomePageListView.as_view()),
+    path('homepagebanner/<int:pk>/', views.HomePageView.as_view()),
 ]

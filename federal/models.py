@@ -18,7 +18,7 @@ class Province(models.Model):
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province_name = models.CharField(max_length=100)
     province_name_ne = models.CharField(max_length=100)
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.province_name
@@ -31,7 +31,7 @@ class District(models.Model):
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
     district_name = models.CharField(max_length=100)
     district_name_ne = models.CharField(max_length=100)
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.district_name

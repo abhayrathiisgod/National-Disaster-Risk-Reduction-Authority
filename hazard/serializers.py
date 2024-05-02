@@ -5,4 +5,5 @@ from .models import Hazards
 class HazardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hazards
-        fields = '__all__'
+        fields = ['id', 'title', 'title_ne', 'description',
+                  'order', 'color', 'icon', 'type']

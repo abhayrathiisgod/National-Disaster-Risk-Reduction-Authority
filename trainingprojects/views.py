@@ -4,7 +4,7 @@ from .serializers import ProjectDetailSerializer, ProjectListSerializer, Trainin
 from .models import Project, Training
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework.pagination import LimitOffsetPagination
 
 # Create your views here.
 
@@ -12,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 class ProjectListView(generics.ListAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectListSerializer
-    pagination_class = None
+    pagination_class = LimitOffsetPagination
 
 
 class ProjectInstance(generics.RetrieveAPIView):
@@ -25,7 +25,7 @@ class ProjectInstance(generics.RetrieveAPIView):
 class TrainingView(generics.ListAPIView):
     queryset = Training.objects.all()
     serializer_class = TrainingSerializer
-    pagination_class = None
+    pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['province', 'district', 'municipality']
 

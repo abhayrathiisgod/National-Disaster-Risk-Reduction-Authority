@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import Page, Introduction, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu
-from .serializers import PageSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, BookmarksSerializer, MenuSerializer
+from .models import Page, Introduction, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu, HomePageBanner
+from .serializers import PageSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, HomePageBannerSerializer, BookmarksSerializer, MenuSerializer
 from rest_framework.response import Response
 # Create your views here.
 
@@ -90,3 +90,14 @@ class MenuViewSet(viewsets.ModelViewSet):
         menuuu = get_object_or_404(queryset, id=pk)
         serializer = MenuSerializer(menuuu)
         return Response(serializer.data)
+
+
+class HomePageListView(generics.ListAPIView):
+    queryset = HomePageBanner.objects.all()
+    serializer_class = HomePageBannerSerializer
+
+
+class HomePageView(generics.RetrieveAPIView):
+    queryset = HomePageBanner.objects.all()
+    serializer_class = HomePageBannerSerializer
+    lookup_field = 'pk'

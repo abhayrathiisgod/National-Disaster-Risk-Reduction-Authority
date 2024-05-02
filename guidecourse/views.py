@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from guidecourse.models import GuideCourse, Guidechildren
 from guidecourse.serializers import GuideCourseSerializer, GuidechildrenSerializer, CourseDetailSerializer, CourseSerializer
-
+from rest_framework.pagination import LimitOffsetPagination
 # Create your views here.
 
 
@@ -14,6 +14,7 @@ from .serializers import GuideCourseSerializer, GuideListSerializer
 class CourseListView(generics.ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = LimitOffsetPagination
 
 
 class CourseInstance(generics.RetrieveAPIView):
@@ -25,11 +26,13 @@ class CourseInstance(generics.RetrieveAPIView):
 class GuideListView(generics.ListAPIView):
     queryset = GuideCourse.objects.all()
     serializer_class = GuideListSerializer
+    pagination_class = LimitOffsetPagination
 
 
 class GuideCourseView(generics.ListAPIView):
     queryset = GuideCourse.objects.all()
     serializer_class = GuideCourseSerializer
+    pagination_class = LimitOffsetPagination
 
 
 class GuideCourseDetailView(generics.RetrieveAPIView):
