@@ -101,7 +101,7 @@ class Incident(models.Model):
     ]
 
     event = models.CharField(choices=DISASTER_TYPES, null=True, blank=True)
-    hazard = models.ForeignKey(Hazards, on_delete=models.DO_NOTHING)
+    hazard = models.ForeignKey(Hazards, on_delete=models.PROTECT)
     loss = models.ForeignKey(
         Loss, on_delete=models.CASCADE, null=True, blank=True)
     createdBy = models.ForeignKey(

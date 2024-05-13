@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from federal.models import Province, District, Municipality
+from django.core.validators import FileExtensionValidator
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -17,21 +18,35 @@ class Donater(models.Model):
     donater_updated_at = models.DateTimeField()
     donater_deleted_at = models.DateTimeField(blank=True, null=True)
     name = models.TextField()
-    icon = models.ImageField(upload_to='uploads/donater/icon')
+    icon = models.ImageField(upload_to='uploads/donater/icon', validators=[
+        FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
+                                                   "png"])])
     link = models.URLField()
     donater_created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='created_donaters')
+        User, on_delete=models.PROTECT, related_name='created_donaters')
     donater_updated_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True, related_name='updated_donaters')
 
     def __str__(self) -> str:
         return self.name
 
+    def delete(self, *args, **kwargs):
+        self.icon.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = Donater.objects.get(pk=self.pk)
+            if self.icon != old_instance.icon:
+                old_instance.icon.delete(save=False)
+
+        super(Donater, self).save(*args, **kwargs)
+
 
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    donor = models.ForeignKey(Donater, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT)
+    donor = models.ForeignKey(Donater, on_delete=models.PROTECT)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -42,10 +57,10 @@ class Project(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='created_projects')
+        User, on_delete=models.PROTECT, related_name='created_projects')
     updated_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, blank=True, null=True, related_name='updated_projects')
-    district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+        User, on_delete=models.PROTECT, blank=True, null=True, related_name='updated_projects')
+    district = models.ForeignKey(District, on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return self.title
@@ -53,7 +68,7 @@ class Project(models.Model):
 
 class Training(models.Model):
     id = models.AutoField(primary_key=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     startDate = models.DateField(blank=True, null=True)
@@ -62,10 +77,10 @@ class Training(models.Model):
     description = models.TextField()
     description = models.TextField()
     attendants = models.CharField(max_length=255, blank=True, null=True)
-    province = models.ForeignKey(Province, on_delete=models.DO_NOTHING)
-    district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT)
+    district = models.ForeignKey(District, on_delete=models.PROTECT)
     municipality = models.ForeignKey(
-        Municipality, on_delete=models.DO_NOTHING, blank=True, null=True)
+        Municipality, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title

@@ -1,6 +1,7 @@
 from django.db import models
 from publication.models import Publications
 import os
+from django.core.validators import FileExtensionValidator
 
 
 class ContactDetail(models.Model):
@@ -43,6 +44,18 @@ class WardDocument(models.Model):
     def __str__(self) -> str:
         return self.filename
 
+    def delete(self, *args, **kwargs):
+        self.document.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = WardDocument.objects.get(pk=self.pk)
+            if self.document != old_instance.document:
+                old_instance.document.delete(save=False)
+
+        super(WardDocument, self).save(*args, **kwargs)
+
 
 class FrequentlyAskedQuestions(models.Model):
     id = models.AutoField(primary_key=True)
@@ -60,13 +73,27 @@ class Page(models.Model):
     title = models.TextField()
     title_ne = models.TextField()
     featured_image = models.ImageField(
-        upload_to='uploads/page/featured_image', null=True, blank=True)
+        upload_to='uploads/page/featured_image', null=True, blank=True, validators=[
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
+                                                       "png"])])
     description = models.TextField()
     description_ne = models.TextField()
     slug = models.SlugField()
 
     def __str__(self) -> str:
         return self.title
+
+    def delete(self, *args, **kwargs):
+        self.featured_image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = Page.objects.get(pk=self.pk)
+            if self.featured_image != old_instance.featured_image:
+                old_instance.featured_image.delete(save=False)
+
+        super(Page, self).save(*args, **kwargs)
 
 
 class Bookmarks(models.Model):
@@ -84,12 +111,12 @@ class Menu(models.Model):
     name = models.TextField()
     name_ne = models.TextField()
     parent = models.ForeignKey(
-        'self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
+        'self', on_delete=models.PROTECT, related_name='children', null=True, blank=True)
 
     link = models.CharField(max_length=100, null=True, blank=True)
     is_external_link = models.BooleanField(default=False)
     content_source = models.ForeignKey(
-        Publications, on_delete=models.CASCADE, null=True, blank=True)
+        Publications, on_delete=models.PROTECT, null=True, blank=True)
     page = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self) -> str:
@@ -111,4 +138,18 @@ class HomePageBanner(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='uploads/homepage/banner')
+    image = models.ImageField(upload_to='uploads/homepage/banner', validators=[
+                              FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
+                                                                         "png"])])
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = HomePageBanner.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(HomePageBanner, self).save(*args, **kwargs)

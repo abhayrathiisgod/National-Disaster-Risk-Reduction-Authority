@@ -13,7 +13,7 @@ class Gallery(models.Model):
 
 class GalleryImage(models.Model):
     gallery = models.ForeignKey(
-        Gallery, on_delete=models.CASCADE, related_name='images')
+        Gallery, on_delete=models.PROTECT, related_name='images')
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     title_ne = models.CharField(max_length=255, blank=True, null=True)
@@ -25,6 +25,19 @@ class GalleryImage(models.Model):
 
     def __str__(self):
         return f"Image {self.id} of {self.gallery.title}"
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = GalleryImage.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(GalleryImage, self).save(*args, **kwargs)
 
 
 class VideoGallery(models.Model):

@@ -8,7 +8,7 @@ from django.utils.timezone import now
 class AlertList(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
-    wards = models.ForeignKey(Ward, on_delete=models.DO_NOTHING, default=101)
+    wards = models.ForeignKey(Ward, on_delete=models.PROTECT, default=101)
     point = models.CharField()
     createdOn = models.DateTimeField(default=now)
     titleNe = models.CharField(max_length=255)
@@ -28,7 +28,7 @@ class AlertList(models.Model):
         User, on_delete=models.SET_NULL, related_name='%(class)s_created', null=True, blank=True)
     updatedBy = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='%(class)s_updated', null=True, blank=True)
-    hazard = models.ForeignKey(Hazards, on_delete=models.DO_NOTHING)
+    hazard = models.ForeignKey(Hazards, on_delete=models.PROTECT)
     DISASTER_TYPES = [
         ('Earthquake', 'Earthquake'),
         ('Hurricane', 'Hurricane'),

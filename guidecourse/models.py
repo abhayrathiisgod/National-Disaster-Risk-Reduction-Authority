@@ -15,6 +15,19 @@ class GuideCourse(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = GuideCourse.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(GuideCourse, self).save(*args, **kwargs)
+
 
 class Guidechildren(models.Model):
     id = models.AutoField(primary_key=True)
@@ -31,6 +44,19 @@ class Guidechildren(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = Guidechildren.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(Guidechildren, self).save(*args, **kwargs)
 
 
 class Course(models.Model):
@@ -61,3 +87,16 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = Course.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(Course, self).save(*args, **kwargs)

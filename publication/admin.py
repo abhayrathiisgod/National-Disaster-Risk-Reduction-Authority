@@ -7,7 +7,8 @@ class PublicationTypeAdmin(admin.ModelAdmin):
     actions = None
     list_display = ('id', 'publication_type', 'publication_type_ne')
     list_display_links = ('id', 'publication_type', 'publication_type_ne')
-    search_fields = ('publication_type',)
+    list_filter = ('publication_type',)
+    search_fields = ('publication_type', 'title')
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
@@ -43,7 +44,7 @@ class PublicationsAdmin(admin.ModelAdmin):
     actions = None
     list_display = ('id', 'pub_type', 'title', 'date', 'is_published')
     list_display_links = ('id', 'title', 'date', 'is_published')
-    list_filter = ('id', 'date', 'is_published',)
+    list_filter = ('pub_type', 'id', 'date', 'is_published')
     search_fields = ('title',)
 
     def has_delete_permission(self, request, obj=None):

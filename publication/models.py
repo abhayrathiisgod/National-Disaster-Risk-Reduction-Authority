@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.text import slugify
+from django.core.validators import FileExtensionValidator
 
 
 class PublicationType(models.Model):
@@ -48,9 +50,10 @@ class PublicationAuthor(models.Model):
 
 class Publications(models.Model):
     id = models.AutoField(primary_key=True)
-    pub_type = models.ForeignKey(PublicationType, on_delete=models.CASCADE)
-    pub_author = models.ForeignKey(PublicationAuthor, on_delete=models.CASCADE)
+    pub_type = models.ForeignKey(PublicationType, on_delete=models.PROTECT)
+    pub_author = models.ForeignKey(PublicationAuthor, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     title_ne = models.CharField(max_length=255)
     description = models.TextField(default='')
     description_ne = models.TextField(default='')
@@ -59,8 +62,25 @@ class Publications(models.Model):
     date = models.DateField(default='')
     pdffile = models.FileField(
         upload_to='uploads/publication/pdf', default=None)
-    image = models.ImageField(upload_to='uploads/publication/image')
+    image = models.ImageField(upload_to='uploads/publication/image', validators=[
+        FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
+                                                   "png"])], blank=True, null=True)
     is_published = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        if self.pk:
+            old_instance = Publications.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+            if self.pdffile != old_instance.pdffile:
+                old_instance.pdffile.delete(save=False)
+
+        super(Publications, self).save(*args, **kwargs)
