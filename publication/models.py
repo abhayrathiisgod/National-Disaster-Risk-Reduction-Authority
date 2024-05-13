@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import FileExtensionValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from PyPDF2 import PdfFileReader
+from pdf2image import convert_from_path
+from django.conf import settings
+import os
 
 
 class PublicationType(models.Model):
@@ -84,3 +90,6 @@ class Publications(models.Model):
                 old_instance.pdffile.delete(save=False)
 
         super(Publications, self).save(*args, **kwargs)
+
+
+# def convert_pdf_to_image(sender, instance, created, **kwargs):
