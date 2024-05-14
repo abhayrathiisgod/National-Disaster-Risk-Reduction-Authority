@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpRequest
 from bulletin.models import Bulletin, BulletinAuthor, BulletinType
 
 
@@ -12,8 +13,9 @@ class BulletinAuthorAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(self, request, obj=None) -> bool:
-        if request.user.is_superuser:
-            return True
+        return False
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
         return False
 
 
@@ -30,6 +32,24 @@ class BulletinAdmin(admin.ModelAdmin):
             return True
         return False
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(BulletinAdmin, self).get_form(request, obj, **kwargs)
+
+        bulletin_author_field = form.base_fields.get("bulletin_author")
+        if bulletin_author_field:
+            bulletin_author_field.widget.can_add_related = False
+            bulletin_author_field.widget.can_change_related = False
+            bulletin_author_field.widget.can_delete_related = False
+            bulletin_author_field.widget.can_view_related = False
+
+        bulletin_type_field = form.base_fields.get("bulletin_type")
+        if bulletin_type_field:
+            bulletin_type_field.widget.can_add_related = False
+            bulletin_type_field.widget.can_change_related = False
+            bulletin_type_field.widget.can_delete_related = False
+            bulletin_type_field.widget.can_view_related = False
+        return form
+
 
 class BulletinTypeAdmin(admin.ModelAdmin):
     actions = None
@@ -44,8 +64,6 @@ class BulletinTypeAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(self, request, obj=None) -> bool:
-        if request.user.is_superuser:
-            return True
         return False
 
 

@@ -2,82 +2,110 @@ from django.db import models
 from publication.models import Publications
 import os
 from django.core.validators import FileExtensionValidator
+from django_ckeditor_5.fields import CKEditor5Field
+from PyPDF2 import PdfFileReader
+from pdf2image import convert_from_path
+from django.db import models
+from io import BytesIO
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.utils.safestring import mark_safe
 
 
 class ContactDetail(models.Model):
-    id = models.AutoField(primary_key=True)
-    detail = models.TextField()
-    detail_ne = models.TextField()
+    detail = CKEditor5Field('Text', config_name='extends')
+    detail_ne = CKEditor5Field('Text', config_name='extends')
 
     def __str__(self) -> str:
         return self.detail
 
 
 class Introduction(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.TextField()
-    title_ne = models.TextField()
-    description = models.TextField()
-    description_ne = models.TextField()
-    sub_title = models.TextField()
-    sub_title_ne = models.TextField()
-    content = models.TextField()
-    content_ne = models.TextField()
+    title = CKEditor5Field('Text', config_name='extends')
+    title_ne = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
+    sub_title = CKEditor5Field('Text', config_name='extends')
+    sub_title_ne = CKEditor5Field('Text', config_name='extends')
+    content = CKEditor5Field('Text', config_name='extends')
+    content_ne = CKEditor5Field('Text', config_name='extends')
 
     def __str__(self) -> str:
         return self.title
 
 
 class WardDocument(models.Model):
-    id = models.AutoField(primary_key=True)
     filename = models.CharField(max_length=255)
     filename_ne = models.CharField(max_length=255)
     document = models.FileField(upload_to='uploads/ward_document')
     file_extension = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(
+        upload_to='uploads/ward_document_images', blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.document:
+            _, extension = os.path.splitext(self.document.name)
+            self.file_extension = extension
+            if extension.lower() == '.pdf':
+                image_data = self.extract_first_page_as_image()
+                if image_data:
+                    self.image.save('first_page.jpg', image_data, save=False)
 
-        _, extension = os.path.splitext(self.document.name)
-        self.file_extension = extension
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def extract_first_page_as_image(self):
+        if self.document:
+            images = convert_from_path(self.document.path)
+            if images:
+                first_page_image = images[0]
+
+                img_io = BytesIO()
+                first_page_image.save(img_io, format='JPEG')
+                img_io.seek(0)
+
+                img_file = InMemoryUploadedFile(
+                    img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
+
+                return img_file
+
+        return None
+
+    def __str__(self):
         return self.filename
 
     def delete(self, *args, **kwargs):
+        if self.image:
+            self.image.delete(save=False)
         self.document.delete(save=False)
         super().delete(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_instance = WardDocument.objects.get(pk=self.pk)
-            if self.document != old_instance.document:
-                old_instance.document.delete(save=False)
-
-        super(WardDocument, self).save(*args, **kwargs)
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
 
 
 class FrequentlyAskedQuestions(models.Model):
-    id = models.AutoField(primary_key=True)
-    question = models.TextField()
-    question_ne = models.TextField()
-    answer = models.TextField()
-    answer_ne = models.TextField()
+    question = CKEditor5Field('Text', config_name='extends')
+    question_ne = CKEditor5Field('Text', config_name='extends')
+    answer = CKEditor5Field('Text', config_name='extends')
+    answer_ne = CKEditor5Field('Text', config_name='extends')
 
     def __str__(self) -> str:
         return self.question
 
 
 class Page(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.TextField()
-    title_ne = models.TextField()
+    title = CKEditor5Field('Text', config_name='extends')
+    title_ne = CKEditor5Field('Text', config_name='extends')
     featured_image = models.ImageField(
         upload_to='uploads/page/featured_image', null=True, blank=True, validators=[
             FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                        "png"])])
-    description = models.TextField()
-    description_ne = models.TextField()
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
     slug = models.SlugField()
 
     def __str__(self) -> str:
@@ -97,7 +125,6 @@ class Page(models.Model):
 
 
 class Bookmarks(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.TextField()
     name_ne = models.TextField()
     link = models.URLField()
@@ -107,7 +134,6 @@ class Bookmarks(models.Model):
 
 
 class Menu(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.TextField()
     name_ne = models.TextField()
     parent = models.ForeignKey(
@@ -135,7 +161,6 @@ class ContactForm(models.Model):
 
 
 class HomePageBanner(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     image = models.ImageField(upload_to='uploads/homepage/banner', validators=[
@@ -153,3 +178,9 @@ class HomePageBanner(models.Model):
                 old_instance.image.delete(save=False)
 
         super(HomePageBanner, self).save(*args, **kwargs)
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'

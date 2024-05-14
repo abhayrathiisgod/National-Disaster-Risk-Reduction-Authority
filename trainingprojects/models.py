@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from federal.models import Province, District, Municipality
 from django.core.validators import FileExtensionValidator
 from django_filters.rest_framework import DjangoFilterBackend
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Address(models.Model):
@@ -17,7 +18,7 @@ class Donater(models.Model):
     donater_created_at = models.DateTimeField()
     donater_updated_at = models.DateTimeField()
     donater_deleted_at = models.DateTimeField(blank=True, null=True)
-    name = models.TextField()
+    name = CKEditor5Field('Text', config_name='extends')
     icon = models.ImageField(upload_to='uploads/donater/icon', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -44,7 +45,6 @@ class Donater(models.Model):
 
 
 class Project(models.Model):
-    id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     donor = models.ForeignKey(Donater, on_delete=models.PROTECT)
     created_at = models.DateTimeField()
@@ -67,15 +67,14 @@ class Project(models.Model):
 
 
 class Training(models.Model):
-    id = models.AutoField(primary_key=True)
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     startDate = models.DateField(blank=True, null=True)
     endDate = models.DateField(blank=True, null=True)
     num_of_participants = models.IntegerField()
-    description = models.TextField()
-    description = models.TextField()
+    description = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Text', config_name='extends')
     attendants = models.CharField(max_length=255, blank=True, null=True)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     district = models.ForeignKey(District, on_delete=models.PROTECT)

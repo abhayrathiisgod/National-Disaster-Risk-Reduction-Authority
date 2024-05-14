@@ -1,14 +1,14 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Hazards(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     title_en = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
-    order = models.IntegerField()
-    description = models.TextField()
+    order = models.IntegerField(unique=True)
+    description = CKEditor5Field('Text', config_name='extends')
     icon = models.ImageField(upload_to='uplods/hazard_icons/', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])

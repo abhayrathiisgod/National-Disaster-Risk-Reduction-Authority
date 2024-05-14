@@ -1,15 +1,17 @@
 from django.db import models
-
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.safestring import mark_safe
 # Create your models here.
 
 
 class GuideCourse(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
-    description = models.TextField()
-    description_ne = models.TextField()
+    description = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    description_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/guide_course')
 
     def __str__(self) -> str:
@@ -28,17 +30,24 @@ class GuideCourse(models.Model):
 
         super(GuideCourse, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class Guidechildren(models.Model):
-    id = models.AutoField(primary_key=True)
     parent = models.ManyToManyField(
         'GuideCourse', related_name='children', blank=True)
     name = models.CharField(max_length=255)
     name_ne = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
-    description = models.TextField()
-    description_ne = models.TextField()
+    description = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    description_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(
         upload_to='uploads/guide_course/children/', default=None, null=True)
 
@@ -58,18 +67,27 @@ class Guidechildren(models.Model):
 
         super(Guidechildren, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class Course(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     path = models.URLField()
     image = models.ImageField(upload_to='uploads/guide_course/course')
     youtube_url = models.URLField()
-    description = models.TextField()
-    description_ne = models.TextField()
-    target_audience = models.TextField()
-    target_audience_ne = models.TextField()
+    description = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    description_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    target_audience = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    target_audience_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     duration = models.CharField(max_length=55)
     SKILL_LEVEL_CHOICES = [
         ('beginner', 'Beginner'),
@@ -82,11 +100,19 @@ class Course(models.Model):
         ('Nepali', 'Nepali'),
     ]
     language = models.CharField(max_length=20, choices=LANGUAGE_CHOICES)
-    learning_objective = models.TextField()
-    learning_objective_ne = models.TextField()
+    learning_objective = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    learning_objective_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
 
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)

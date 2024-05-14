@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Max
+from django_ckeditor_5.fields import CKEditor5Field
 # Create your models here.
-
 
 # class centroid(models.Model):
 #     id = models.AutoField(primary_key=True)
@@ -13,7 +13,6 @@ from django.db.models import Max
 
 
 class Province(models.Model):
-    id = models.AutoField(primary_key=True)
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province_name = models.CharField(max_length=100)
@@ -25,7 +24,6 @@ class Province(models.Model):
 
 
 class District(models.Model):
-    id = models.AutoField(primary_key=True)
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
@@ -38,8 +36,6 @@ class District(models.Model):
 
 
 class Municipality(models.Model):
-
-    id = models.AutoField(primary_key=True)
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
@@ -61,7 +57,6 @@ class Municipality(models.Model):
 
 
 class Ward(models.Model):
-    id = models.AutoField(primary_key=True)
    # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)

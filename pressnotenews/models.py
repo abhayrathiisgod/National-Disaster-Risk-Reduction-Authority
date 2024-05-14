@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
-# Create your models here.
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.safestring import mark_safe
 
 
 class Author(models.Model):
@@ -27,12 +28,12 @@ class NewsInfo(models.Model):
     id = models.AutoField(primary_key=True)
     # author = models.ForeignKey(Author, on_delete=models.DO_NOTHING, null=True)
     # type = models.ForeignKey(Type, on_delete=models.DO_NOTHING, null=True)
-    title = models.TextField()
-    title_ne = models.TextField()
-    description = models.TextField()
-    description_ne = models.TextField()
-    summary = models.TextField()
-    summary_ne = models.TextField()
+    title = CKEditor5Field('Text', config_name='extends')
+    title_ne = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
+    summary = CKEditor5Field('Text', config_name='extends')
+    summary_ne = CKEditor5Field('Text', config_name='extends')
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='uploads/news_info', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
@@ -54,17 +55,22 @@ class NewsInfo(models.Model):
 
         super(NewsInfo, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class PressNote(models.Model):
-    id = models.AutoField(primary_key=True)
     author = models.ForeignKey(Author, on_delete=models.PROTECT, null=True)
     type = models.ForeignKey(Type, on_delete=models.PROTECT, null=True)
-    title = models.TextField()
-    title_ne = models.TextField()
-    description = models.TextField()
-    description_ne = models.TextField()
-    summary = models.TextField()
-    summary_ne = models.TextField()
+    title = CKEditor5Field('Text', config_name='extends')
+    title_ne = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
+    summary = CKEditor5Field('Text', config_name='extends')
+    summary_ne = CKEditor5Field('Text', config_name='extends')
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='uploads/press-note', validators=[
         FileExtensionValidator(allowed_extensions=["pdf", "doc",
@@ -92,3 +98,9 @@ class PressNote(models.Model):
                 old_instance.file.delete(save=False)
 
         super(PressNote, self).save(*args, **kwargs)
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'

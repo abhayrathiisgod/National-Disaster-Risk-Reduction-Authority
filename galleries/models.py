@@ -1,8 +1,9 @@
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.safestring import mark_safe
 
 
 class Gallery(models.Model):
-    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     image = models.ImageField(upload_to='uploads/gallery/display_image/')
@@ -10,17 +11,24 @@ class Gallery(models.Model):
     def __str__(self):
         return self.title
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class GalleryImage(models.Model):
     gallery = models.ForeignKey(
         Gallery, on_delete=models.PROTECT, related_name='images')
-    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     title_ne = models.CharField(max_length=255, blank=True, null=True)
     photo_credit = models.CharField(max_length=255, blank=True, null=True)
     photo_credit_ne = models.CharField(max_length=255, blank=True, null=True)
-    caption = models.TextField(blank=True, null=True)
-    caption_ne = models.TextField(blank=True, null=True)
+    caption = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    caption_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/gallery/')
 
     def __str__(self):
@@ -39,10 +47,15 @@ class GalleryImage(models.Model):
 
         super(GalleryImage, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="150" height="150" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class VideoGallery(models.Model):
-    id = models.IntegerField(primary_key=True)
     youtube_url = models.URLField()
 
     def __str__(self) -> str:
-        return self.id
+        return str(self.id)

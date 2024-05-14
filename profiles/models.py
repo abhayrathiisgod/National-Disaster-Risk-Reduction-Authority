@@ -1,10 +1,11 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.safestring import mark_safe
 # Create your models here.
 
 
 class Skills(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.TextField(max_length=255)
     title_ne = models.TextField(max_length=255)
     color = models.CharField(max_length=100)
@@ -14,7 +15,6 @@ class Skills(models.Model):
 
 
 class Designation(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.CharField(max_length=200, blank=True, null=True)
     designation_ne = models.CharField(max_length=200, blank=True, null=True)
     office = models.CharField(max_length=100, blank=True, null=True)
@@ -28,7 +28,6 @@ class Designation(models.Model):
 
 
 class Department(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.TextField(max_length=255, unique=True)
     title_ne = models.TextField(max_length=255, unique=True)
 
@@ -37,7 +36,6 @@ class Department(models.Model):
 
 
 class TrainingOrg(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.TextField(max_length=255, unique=True)
     title_ne = models.TextField(max_length=255)
 
@@ -46,7 +44,6 @@ class TrainingOrg(models.Model):
 
 
 class TrainingCertificate(models.Model):
-    id = models.AutoField(primary_key=True)
     certificate = models.URLField()
 
     def __str__(self) -> str:
@@ -54,13 +51,12 @@ class TrainingCertificate(models.Model):
 
 
 class Trainings(models.Model):
-    id = models.AutoField(primary_key=True)
     training_org = models.ForeignKey(TrainingOrg, on_delete=models.PROTECT)
     training_certificate = models.ManyToManyField(TrainingCertificate)
     title = models.TextField(max_length=255, unique=True)
     title_ne = models.TextField(max_length=255)
-    description = models.TextField()
-    description_ne = models.TextField()
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
     start_date = models.DateField()
     end_date = models.DateField()
 
@@ -69,17 +65,16 @@ class Trainings(models.Model):
 
 
 class OfficerProfile(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     departments = models.ManyToManyField(Department)
     skills = models.ManyToManyField(Skills)
-    trainings = models.ManyToManyField(Trainings, blank=True, null=True)
+    trainings = models.ManyToManyField(Trainings, blank=True)
     name = models.CharField(max_length=100, unique=True)
     name_ne = models.CharField(max_length=100)
     mobile = models.CharField(max_length=15)
     email = models.EmailField()
-    additional_info = models.TextField()
-    additional_info_ne = models.TextField()
+    additional_info = CKEditor5Field('Text', config_name='extends')
+    additional_info_ne = CKEditor5Field('Text', config_name='extends')
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -103,14 +98,21 @@ class OfficerProfile(models.Model):
 
         super(OfficerProfile, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class CommiteProfile(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -132,14 +134,21 @@ class CommiteProfile(models.Model):
 
         super(CommiteProfile, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class NationalCouncilHead(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -161,14 +170,21 @@ class NationalCouncilHead(models.Model):
 
         super(NationalCouncilHead, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class ExecutiveCommitteHead(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -190,14 +206,21 @@ class ExecutiveCommitteHead(models.Model):
 
         super(ExecutiveCommitteHead, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class OfficersHead(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -219,14 +242,21 @@ class OfficersHead(models.Model):
 
         super(OfficersHead, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class OfficersSpokesPerson(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -248,14 +278,21 @@ class OfficersSpokesPerson(models.Model):
 
         super(OfficersSpokesPerson, self).save(*args, **kwargs)
 
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
 
 class InformationOfficer(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
-    additional_info = models.TextField(blank=True, null=True)
-    additional_info_ne = models.TextField(blank=True, null=True)
+    additional_info = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
+    additional_info_ne = CKEditor5Field(
+        'Text', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -276,3 +313,9 @@ class InformationOfficer(models.Model):
                 old_instance.image.delete(save=False)
 
         super(InformationOfficer, self).save(*args, **kwargs)
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'

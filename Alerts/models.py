@@ -3,17 +3,17 @@ from hazard.models import Hazards
 from django.contrib.auth.models import User
 from federal.models import Ward
 from django.utils.timezone import now
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class AlertList(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     wards = models.ForeignKey(Ward, on_delete=models.PROTECT, default=101)
     point = models.CharField()
     createdOn = models.DateTimeField(default=now)
     titleNe = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
-    description = models.TextField()
+    description = CKEditor5Field('Text', config_name='extends')
     verified = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     startedOn = models.DateTimeField()

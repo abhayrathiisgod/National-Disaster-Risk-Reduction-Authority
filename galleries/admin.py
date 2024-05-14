@@ -1,5 +1,12 @@
 from django.contrib import admin
 from galleries.models import Gallery, GalleryImage, VideoGallery
+from django.contrib.admin.options import TabularInline
+from django.db import models
+
+
+class GalleryImageInline(TabularInline):
+    extra = 1
+    model = GalleryImage
 
 
 class GalleryAdmin(admin.ModelAdmin):
@@ -7,6 +14,8 @@ class GalleryAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
+    readonly_fields = ('image_preview',)
+    inlines = (GalleryImageInline,)
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -30,6 +39,19 @@ class GalleryImageAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'gallery', 'title', 'photo_credit')
     list_filter = ('id', 'gallery__title')
     search_fields = ('title', 'photo_credit')
+    readonly_fields = ('image_preview',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(GalleryImageAdmin, self).get_form(request, obj, **kwargs)
+
+        gallery_field = form.base_fields.get("gallery")
+        if gallery_field:
+            gallery_field.widget.can_add_related = False
+            gallery_field.widget.can_change_related = False
+            gallery_field.widget.can_delete_related = False
+            gallery_field.widget.can_view_related = False
+
+        return form
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:

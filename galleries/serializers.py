@@ -10,11 +10,11 @@ class GalleryImageSerializer(serializers.ModelSerializer):
 
 
 class GallerySerializer(serializers.ModelSerializer):
-    images = GalleryImageSerializer(many=True)
+    # images = GalleryImageSerializer(many=True)
 
     class Meta:
         model = Gallery
-        fields = ['id', 'title', 'title_ne', 'image', 'images']
+        fields = ['id', 'title', 'title_ne', 'image']
 
 
 class GalleryDetailSerializer(serializers.ModelSerializer):

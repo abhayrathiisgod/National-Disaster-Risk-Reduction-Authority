@@ -1,13 +1,12 @@
 from django.db import models
 from django.db.models import Max
 from federal.models import Province, District, Municipality
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Province Wise Focal Person Contact List
 
 
 class ProvinceWiseFocalPersonContactList(models.Model):
-
-    id = models.AutoField(primary_key=True)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     designation = models.CharField(max_length=255)
     designation_ne = models.CharField(max_length=255)
@@ -30,9 +29,8 @@ class ProvinceWiseFocalPersonContactList(models.Model):
 
 
 class MohaPhoneDirectoryList(models.Model):
-    id = models.AutoField(primary_key=True)
-    division_section = models.TextField()
-    division_section_ne = models.TextField()
+    division_section = CKEditor5Field('Text', config_name='extends')
+    division_section_ne = CKEditor5Field('Text', config_name='extends')
     phone = models.CharField(blank=True, max_length=255)
     mobile = models.CharField(blank=True, max_length=255)
     email = models.EmailField(blank=True)
@@ -41,18 +39,16 @@ class MohaPhoneDirectoryList(models.Model):
 
 
 class MohaSubordinateList(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.TextField()
-    name_ne = models.TextField()
-    address = models.TextField()
-    address_ne = models.TextField()
-    phone = models.TextField(blank=True)
+    name = CKEditor5Field('Text', config_name='extends')
+    name_ne = CKEditor5Field('Text', config_name='extends')
+    address = CKEditor5Field('Text', config_name='extends')
+    address_ne = CKEditor5Field('Text', config_name='extends')
+    phone = CKEditor5Field('Text', config_name='extends', blank=True)
 
 # Deoc Head List
 
 
 class DeocHeadList(models.Model):
-    id = models.AutoField(primary_key=True)
     designation = models.CharField(max_length=255)
     designation_ne = models.CharField(max_length=255)
     office_landline_no = models.CharField(max_length=255)
@@ -64,7 +60,6 @@ class DeocHeadList(models.Model):
 
 
 class LocalDisasterManagementContactList(models.Model):
-    id = models.AutoField(primary_key=True)
     email = models.EmailField()
     contact_num = models.CharField(max_length=255)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
@@ -76,14 +71,12 @@ class LocalDisasterManagementContactList(models.Model):
 
 
 class SnakeBites(models.Model):
-    id = models.AutoField(primary_key=True)
     treatment_centre = models.CharField(max_length=255)
     treatment_centre_ne = models.CharField(max_length=255)
     district = models.ForeignKey(District, on_delete=models.PROTECT)
 
 
 class EmergencyVehicle(models.Model):
-    id = models.AutoField(primary_key=True)
     type = (
         ('Ambulance', 'Ambulance'),
         ('Fire_truck', 'Fire_truck'),
@@ -98,7 +91,7 @@ class EmergencyVehicle(models.Model):
     driver_name_ne = models.CharField(max_length=255, blank=True)
     contact = models.CharField(max_length=255, blank=True)
     alt_contact = models.CharField(max_length=255, blank=True)
-    condition = models.TextField()
+    condition = CKEditor5Field('Text', config_name='extends')
     province = models.ForeignKey(
         Province, on_delete=models.PROTECT, blank=True)
     district = models.ForeignKey(

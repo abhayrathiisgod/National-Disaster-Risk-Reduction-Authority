@@ -17,8 +17,6 @@ class PublicationTypeAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(self, request, obj=None) -> bool:
-        if request.user.is_superuser:
-            return True
         return False
 
 
@@ -35,8 +33,6 @@ class PublicationAuthorAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(self, request, obj=None) -> bool:
-        if request.user.is_superuser:
-            return True
         return False
 
 
@@ -61,6 +57,25 @@ class PublicationsAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return False
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(PublicationsAdmin, self).get_form(request, obj, **kwargs)
+
+        # Restrict options for pub_type field
+        pub_type_field = form.base_fields.get("pub_type")
+        if pub_type_field:
+            pub_type_field.widget.can_add_related = False
+            pub_type_field.widget.can_change_related = False
+            pub_type_field.widget.can_delete_related = False
+
+        # Restrict options for pub_author field
+        pub_author_field = form.base_fields.get("pub_author")
+        if pub_author_field:
+            pub_author_field.widget.can_add_related = False
+            pub_author_field.widget.can_change_related = False
+            pub_author_field.widget.can_delete_related = False
+
+        return form
 
 
 admin.site.register(PublicationType, PublicationTypeAdmin)

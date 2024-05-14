@@ -3,10 +3,10 @@ from django.db import models
 from federal.models import Ward
 from django.contrib.auth.models import User
 from hazard.models import Hazards
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Loss(models.Model):
-    id = models.AutoField(primary_key=True)
     peopleDeathCount = models.IntegerField(default=0)
     peopleDeathMaleCount = models.IntegerField(default=0)
     peopleDeathFemaleCount = models.IntegerField(default=0)
@@ -54,22 +54,25 @@ class Loss(models.Model):
 
 
 class Incident(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     point = models.CharField(max_length=255)
-    createdOn = models.DateTimeField(default=timezone.now())
-    modifiedOn = models.DateTimeField(default=timezone.now())
+    createdOn = models.DateTimeField()
+    modifiedOn = models.DateTimeField()
     titleNe = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
-    cause = models.TextField(null=True, blank=True)
+    description = CKEditor5Field(
+        'Text', config_name='extends', null=True, blank=True)
+    cause = CKEditor5Field(
+        'Text', config_name='extends', null=True, blank=True)
     verified = models.BooleanField(default=False)
-    verificationMessage = models.TextField(null=True, blank=True)
+    verificationMessage = CKEditor5Field(
+        'Text', config_name='extends', null=True, blank=True)
     approved = models.BooleanField(default=False)
     polygon = models.CharField(max_length=255, null=True, blank=True)
     incidentOn = models.DateTimeField()
     reportedOn = models.DateTimeField()
     streetAddress = models.CharField(max_length=255)
-    detail = models.TextField(null=True, blank=True)
+    detail = CKEditor5Field(
+        'Text', config_name='extends', null=True, blank=True)
     needFollowup = models.BooleanField(default=False)
     region = models.CharField(max_length=255, null=True, blank=True)
     regionId = models.IntegerField(null=True, blank=True)

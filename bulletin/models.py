@@ -2,11 +2,11 @@ from django.db import models
 import os
 from django.core.validators import FileExtensionValidator
 from django.utils.text import slugify
-# Create your models here.
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.safestring import mark_safe
 
 
 class BulletinAuthor(models.Model):
-    id = models.AutoField(primary_key=True)
     author = models.CharField(max_length=255)
     author_ne = models.CharField(max_length=255)
 
@@ -15,7 +15,6 @@ class BulletinAuthor(models.Model):
 
 
 class BulletinType(models.Model):
-    id = models.AutoField(primary_key=True)
     bulletin_type = models.CharField(max_length=255)
     bulletin_type_ne = models.CharField(max_length=255)
 
@@ -34,12 +33,12 @@ class Bulletin(models.Model):
         BulletinType, on_delete=models.PROTECT)
     title = models.TextField()
     slug = models.SlugField(unique=True, blank=True, null=True)
-    title_ne = models.TextField()
-    summary = models.TextField()
-    summary_ne = models.TextField()
+    title_ne = CKEditor5Field('Text', config_name='extends')
+    summary = CKEditor5Field('Text', config_name='extends')
+    summary_ne = CKEditor5Field('Text', config_name='extends')
     date = models.DateField(auto_now_add=True)
-    description = models.TextField()
-    description_ne = models.TextField()
+    description = CKEditor5Field('Text', config_name='extends')
+    description_ne = CKEditor5Field('Text', config_name='extends')
     file = models.FileField(upload_to='uploads/bulletin/files/',
                             validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
     image = models.ImageField(upload_to='uploads/bulletin/files/', validators=[
@@ -64,3 +63,9 @@ class Bulletin(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'

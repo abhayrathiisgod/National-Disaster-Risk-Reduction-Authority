@@ -20,7 +20,8 @@ urlpatterns = [
     path('api/v1/incidents/', include('incident.urls')),
     path('api/v1/officerprofileinofs/', include('profiles.urls')),
     path('api/v1/nationalbipadalerts/', include('nationalbipadalerts.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
+]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
