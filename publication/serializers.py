@@ -20,7 +20,7 @@ class PublicationsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Publications
-        fields = ['id', 'pub_type', 'pub_author', 'title', 'title_ne',
+        fields = ['id', 'pub_type', 'pub_author', 'title', 'title_ne', 'slug',
                   'summary', 'summary_ne', 'date', 'pdffile', 'image', 'is_published']
 
 
@@ -30,5 +30,5 @@ class PublicationsDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Publications
-        fields = ['id', 'pub_type', 'pub_author', 'title', 'title_ne', 'description', 'description_ne',
+        fields = ['id', 'pub_type', 'pub_author', 'title', 'title_ne', 'slug', 'description', 'description_ne',
                   'date', 'pdffile', 'image', 'is_published']

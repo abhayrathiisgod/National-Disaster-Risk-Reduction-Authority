@@ -9,6 +9,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 import random
 import string
+import fitz
 
 
 class BulletinAuthor(models.Model):

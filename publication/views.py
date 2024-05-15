@@ -18,4 +18,4 @@ class Allpublicationview(generics.ListAPIView):
 class PublicationDetailView(generics.RetrieveAPIView):
     queryset = Publications.objects.all()
     serializer_class = PublicationsDetailSerializer
-    lookup_field = 'pk'
+    lookup_field = 'slug'

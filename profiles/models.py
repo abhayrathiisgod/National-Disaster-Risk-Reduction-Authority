@@ -312,7 +312,7 @@ class OfficersSpokesPerson(models.Model):
 class InformationOfficer(models.Model):
     class Meta:
         verbose_name = "Information Officer Person"
-        verbose_name_plural = "Information Officers List"
+        verbose_name_plural = "Information  Officers List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
