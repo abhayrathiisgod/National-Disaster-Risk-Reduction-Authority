@@ -16,7 +16,7 @@ class AlertList(models.Model):
     createdOn = models.DateTimeField(default=now)
     titleNe = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
-    description = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Description', config_name='extends')
     verified = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     startedOn = models.DateTimeField()

@@ -26,6 +26,7 @@ class BulletinAdmin(admin.ModelAdmin):
     list_display_links = ('bulletin_author', 'bulletin_type', 'title', 'date')
     list_filter = ('date', 'bulletin_author', 'bulletin_type')
     search_fields = ('title',)
+    readonly_fields = ('slug',)
 
     def has_change_permission(self, request, obj=None) -> bool:
         if request.user.is_superuser:

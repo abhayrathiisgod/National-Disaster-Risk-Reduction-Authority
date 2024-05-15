@@ -20,5 +20,14 @@ class BulletinSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bulletin
-        fields = ['id', 'bulletin_author', 'bulletin_type', 'title',
+        fields = ['id', 'bulletin_author', 'bulletin_type', 'title', 'slug',
                   'title_ne', 'summary', 'summary_ne', 'date', 'image']
+
+
+class BulletinDetailSerializer(serializers.ModelSerializer):
+    bulletin_author = BulletinAuthorSerializer()
+    bulletin_type = BulletinTypeSerializer()
+
+    class Meta:
+        model = Bulletin
+        fields = '__all__'

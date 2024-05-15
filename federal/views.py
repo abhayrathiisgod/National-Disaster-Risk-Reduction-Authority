@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics
 from federal.models import Province, District, Municipality, Ward
-from federal.serializers import ProvinceSerializer, DistrictSerializer, MunicipalitySerializer, WardSerializer
+from federal.serializers import ProvinceSerializer, DistrictSerializer, MunicipalitySerializer, WardSerializer, WardDetailSerializer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
+from .filters import DistrictFilter
 # Create your views here.
 
 
@@ -30,6 +31,7 @@ class DistrictView(generics.ListAPIView):
                        DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['id', 'district_name']
     pagination_class = LimitOffsetPagination
+    filterset_class = DistrictFilter
 
 
 class DistrictInstanceView(generics.RetrieveAPIView):
@@ -64,5 +66,5 @@ class WardView(generics.ListAPIView):
 
 class WardInstanceView(generics.RetrieveAPIView):
     queryset = Ward.objects.all()
-    serializer_class = WardSerializer
+    serializer_class = WardDetailSerializer
     lookup_field = 'pk'
