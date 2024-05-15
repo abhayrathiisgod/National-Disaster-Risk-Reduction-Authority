@@ -1,17 +1,41 @@
 from django.urls import path
-from importantcontacts.views import ProvinceWiseFocalPersonContactListView, DeocHeadView, LocalDisasterManagementContactView, MohaSubordinateView, MohaPhoneDirectoryView, SnakeBitesView, AmbulanceView, FireTruckView
-
+from .views import (
+    ProvinceWiseFocalPersonContactViewSet,
+    DeocHeadViewSet,
+    LocalDisasterManagementContactViewSet,
+    MohaSubordinateViewSet,
+    MohaPhoneDirectoryViewSet,
+    SnakeBitesViewSet,
+    EmergencyVehicleViewSet,
+)
 
 urlpatterns = [
-    path('provincewisefocalcontact/',
-         ProvinceWiseFocalPersonContactListView.as_view()),
-    path('deocheadcontact/', DeocHeadView.as_view()),
-    path('localdisastermanagementcontact',
-         LocalDisasterManagementContactView.as_view()),
-    path('mohasubordinate/', MohaSubordinateView.as_view()),
-    path('mohaphonedirectory/', MohaPhoneDirectoryView.as_view()),
-    path('snakebite/', SnakeBitesView.as_view()),
-    path('ambulance/', AmbulanceView.as_view()),
-    path('firetruck/', FireTruckView.as_view()),
-
+    path('provincewisefocalcontact/', ProvinceWiseFocalPersonContactViewSet.as_view(
+        {'get': 'list'}), name='provincewisefocalcontact-list'),
+    path('provincewisefocalcontact/<int:pk>/', ProvinceWiseFocalPersonContactViewSet.as_view(
+        {'get': 'retrieve'}), name='provincewisefocalcontact-detail'),
+    path('deocheadcontact/', DeocHeadViewSet.as_view(
+        {'get': 'list'}), name='deocheadcontact-list'),
+    path('deocheadcontact/<int:pk>/', DeocHeadViewSet.as_view(
+        {'get': 'retrieve'}), name='deocheadcontact-detail'),
+    path('localdisastermanagementcontact/', LocalDisasterManagementContactViewSet.as_view(
+        {'get': 'list'}), name='localdisastermanagementcontact-list'),
+    path('localdisastermanagementcontact/<int:pk>/', LocalDisasterManagementContactViewSet.as_view(
+        {'get': 'retrieve'}), name='localdisastermanagementcontact-detail'),
+    path('mohasubordinate/', MohaSubordinateViewSet.as_view(
+        {'get': 'list'}), name='mohasubordinate-list'),
+    path('mohasubordinate/<int:pk>/', MohaSubordinateViewSet.as_view(
+        {'get': 'retrieve'}), name='mohasubordinate-detail'),
+    path('mohaphonedirectory/', MohaPhoneDirectoryViewSet.as_view(
+        {'get': 'list'}), name='mohaphonedirectory-list'),
+    path('mohaphonedirectory/<int:pk>/', MohaPhoneDirectoryViewSet.as_view(
+        {'get': 'retrieve'}), name='mohaphonedirectory-detail'),
+    path('snakebite/', SnakeBitesViewSet.as_view(
+        {'get': 'list'}), name='snakebite-list'),
+    path('snakebite/<int:pk>/', SnakeBitesViewSet.as_view(
+        {'get': 'retrieve'}), name='snakebite-detail'),
+    path('EmergencyVehicle/', EmergencyVehicleViewSet.as_view(
+        {'get': 'list'}), name='ambulance-list'),
+    path('EmergencyVehicleViewSet/<int:pk>/', EmergencyVehicleViewSet.as_view(
+        {'get': 'retrieve'}), name='ambulance-detail'),
 ]

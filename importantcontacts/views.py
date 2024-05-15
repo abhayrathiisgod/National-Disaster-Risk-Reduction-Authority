@@ -1,55 +1,53 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from importantcontacts.models import ProvinceWiseFocalPersonContactList, DeocHeadList, LocalDisasterManagementContactList, MohaSubordinateList, MohaPhoneDirectoryList, SnakeBites, EmergencyVehicle
-from importantcontacts.serializers import ProvinceWiseFocalPersonContactSerializer, DeocHeadSerializer, LocalDisasterManagementContactSerializer, MohaSubordinateSerializer, MohaPhoneDirectorySerializer, SnakeBiteSerializer, AmbulanceSerializer, FireTruckSerializer
+from importantcontacts.serializers import ProvinceWiseFocalPersonContactSerializer, DeocHeadSerializer, LocalDisasterManagementContactSerializer, MohaSubordinateSerializer, MohaPhoneDirectorySerializer, SnakeBiteSerializer,  EmergencyVehicleSerializer
 from rest_framework.pagination import LimitOffsetPagination
 # Create your views here.
+from rest_framework import viewsets, filters
+from .filters import EmergencyVehicleFilter
 
 
-class ProvinceWiseFocalPersonContactListView(generics.ListAPIView):
+class ProvinceWiseFocalPersonContactViewSet(viewsets.ModelViewSet):
     queryset = ProvinceWiseFocalPersonContactList.objects.all()
     serializer_class = ProvinceWiseFocalPersonContactSerializer
     pagination_class = LimitOffsetPagination
 
 
-class DeocHeadView(generics.ListAPIView):
+class DeocHeadViewSet(viewsets.ModelViewSet):
     queryset = DeocHeadList.objects.all()
     serializer_class = DeocHeadSerializer
     pagination_class = LimitOffsetPagination
 
 
-class LocalDisasterManagementContactView(generics.ListAPIView):
+class LocalDisasterManagementContactViewSet(viewsets.ModelViewSet):
     queryset = LocalDisasterManagementContactList.objects.all()
     serializer_class = LocalDisasterManagementContactSerializer
     pagination_class = LimitOffsetPagination
 
 
-class MohaSubordinateView(generics.ListAPIView):
+class MohaSubordinateViewSet(viewsets.ModelViewSet):
     queryset = MohaSubordinateList.objects.all()
     serializer_class = MohaSubordinateSerializer
     pagination_class = LimitOffsetPagination
 
 
-class MohaPhoneDirectoryView(generics.ListAPIView):
+class MohaPhoneDirectoryViewSet(viewsets.ModelViewSet):
     queryset = MohaPhoneDirectoryList.objects.all()
     serializer_class = MohaPhoneDirectorySerializer
     pagination_class = LimitOffsetPagination
 
 
-class SnakeBitesView(generics.ListAPIView):
+class SnakeBitesViewSet(viewsets.ModelViewSet):
     queryset = SnakeBites.objects.all()
     serializer_class = SnakeBiteSerializer
     pagination_class = LimitOffsetPagination
 
 
-class AmbulanceView(generics.ListAPIView):
-    queryset = EmergencyVehicle.objects.filter(vehicle_type='Ambulance')
-    serializer_class = AmbulanceSerializer
+class EmergencyVehicleViewSet(viewsets.ModelViewSet):
+    queryset = EmergencyVehicle.objects.all()
+    serializer_class = EmergencyVehicleSerializer
     pagination_class = LimitOffsetPagination
-
-
-class FireTruckView(generics.ListAPIView):
-    queryset = EmergencyVehicle.objects.filter(vehicle_type='Fire_truck')
-    serializer_class = FireTruckSerializer
-    pagination_class = LimitOffsetPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_class = EmergencyVehicleFilter

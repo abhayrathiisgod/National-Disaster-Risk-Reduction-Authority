@@ -10,7 +10,7 @@ class GalleryImageInline(TabularInline):
 
 
 class GalleryAdmin(admin.ModelAdmin):
-    actions = None
+    # actions = None
     list_display = ('id', 'title')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
@@ -34,7 +34,7 @@ class GalleryAdmin(admin.ModelAdmin):
 
 
 class GalleryImageAdmin(admin.ModelAdmin):
-    actions = None
+    # actions = None
     list_display = ('id', 'gallery', 'title', 'photo_credit')
     list_display_links = ('id', 'gallery', 'title', 'photo_credit')
     list_filter = ('id', 'gallery__title')
@@ -70,7 +70,7 @@ class GalleryImageAdmin(admin.ModelAdmin):
 
 
 class VideoGalleryAdmin(admin.ModelAdmin):
-    actions = None
+    # actions = None
     list_display = ('id', 'youtube_url')
     list_display_links = ('id', 'youtube_url')
     search_fields = ('youtube_url',)

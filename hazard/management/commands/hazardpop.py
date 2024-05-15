@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         fake = Faker()
 
-        for order in range(3, 20):  # Adjust the range as needed
+        for order in range(22, 40):  # Adjust the range as needed
             title = fake.word()
             title_en = fake.word()
             title_ne = fake.word()

@@ -1,6 +1,10 @@
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.safestring import mark_safe
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 class Gallery(models.Model):
@@ -31,10 +35,8 @@ class GalleryImage(models.Model):
     title_ne = models.CharField(max_length=255, blank=True, null=True)
     photo_credit = models.CharField(max_length=255, blank=True, null=True)
     photo_credit_ne = models.CharField(max_length=255, blank=True, null=True)
-    caption = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
-    caption_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+    caption = models.TextField(blank=True, null=True)
+    caption_ne = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='uploads/gallery/')
 
     def __str__(self):
@@ -68,3 +70,12 @@ class VideoGallery(models.Model):
 
     def __str__(self) -> str:
         return str(self.id)
+
+
+# signalss
+
+
+@receiver(pre_delete, sender=GalleryImage)
+def delete_gallery_image_file(sender, instance, **kwargs):
+    # Delete the associated image file when a GalleryImage instance is deleted
+    instance.image.delete(save=False)

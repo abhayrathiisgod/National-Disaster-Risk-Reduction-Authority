@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
-# Create your views here.
+from .filters import HazardFilter
 
 
 class HazardList(generics.ListAPIView):
@@ -13,9 +13,10 @@ class HazardList(generics.ListAPIView):
     serializer_class = HazardSerializer
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend, filters.OrderingFilter]
-    search_fields = ['title']
+    search_fields = ['title', 'type']
     ordering_fields = ['id', 'title', 'order', 'color', 'type']
     pagination_class = LimitOffsetPagination
+    filterset_class = HazardFilter
 
 
 class HazardInstance(generics.RetrieveAPIView):

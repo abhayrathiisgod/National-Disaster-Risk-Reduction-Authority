@@ -34,26 +34,14 @@ class MohaPhoneDirectorySerializer(serializers.ModelSerializer):
 
 
 class SnakeBiteSerializer(serializers.ModelSerializer):
-    district = DistrictSerializer()
+    # district = DistrictSerializer()
 
     class Meta:
         model = SnakeBites
         fields = ['id', 'treatment_centre', 'treatment_centre_ne', 'district']
 
 
-class AmbulanceSerializer(serializers.ModelSerializer):
-    district = DistrictSerializer()
-    # municipality = MunicipalitySerializer()
-
-    class Meta:
-        model = EmergencyVehicle
-        fields = ['id', 'vehicle_type', 'ownership', 'ownership_ne', 'vechicle_no', 'vechicle_no_ne', 'driver_name',
-                  'driver_name_ne', 'contact', 'alt_contact', 'condition', 'province', 'district', 'municipality']
-
-
-class FireTruckSerializer(serializers.ModelSerializer):
-    district = DistrictSerializer()
-    # municipality = MunicipalitySerializer()
+class EmergencyVehicleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmergencyVehicle
