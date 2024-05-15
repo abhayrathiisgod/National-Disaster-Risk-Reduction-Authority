@@ -14,8 +14,7 @@ class AlertListAdmin(admin.ModelAdmin):
     actions = None
     list_display = ('id', 'title', 'source', 'verified', 'public',
                     'region', 'regionId', 'hazard')
-    list_filter = ('verified', 'public',
-                   'region', 'regionId', 'hazard')
+    list_filter = ('verified', 'public', 'hazard')
     list_display_links = ('id', 'title', 'source', 'verified', 'public',
                           'region', 'regionId', 'hazard')
     readonly_fields = ('createdBy', 'expireOn', 'updatedBy')

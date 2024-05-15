@@ -6,6 +6,9 @@ from django.utils.safestring import mark_safe
 
 
 class Skills(models.Model):
+    class Meta:
+        verbose_name = "Skill"
+        verbose_name_plural = "Skills"
     title = models.TextField(max_length=255)
     title_ne = models.TextField(max_length=255)
     color = models.CharField(max_length=100)
@@ -51,6 +54,9 @@ class TrainingCertificate(models.Model):
 
 
 class Trainings(models.Model):
+    class Meta:
+        verbose_name = "Training"
+        verbose_name_plural = "Trainings"
     training_org = models.ForeignKey(TrainingOrg, on_delete=models.PROTECT)
     training_certificate = models.ManyToManyField(TrainingCertificate)
     title = models.TextField(max_length=255, unique=True)
@@ -65,6 +71,9 @@ class Trainings(models.Model):
 
 
 class OfficerProfile(models.Model):
+    class Meta:
+        verbose_name = "Officer Profile"
+        verbose_name_plural = "Officer Profile List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     departments = models.ManyToManyField(Department)
     skills = models.ManyToManyField(Skills)
@@ -106,6 +115,9 @@ class OfficerProfile(models.Model):
 
 
 class CommiteProfile(models.Model):
+    class Meta:
+        verbose_name = "Committee Profile"
+        verbose_name_plural = "Committee Profilee List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
@@ -142,6 +154,9 @@ class CommiteProfile(models.Model):
 
 
 class NationalCouncilHead(models.Model):
+    class Meta:
+        verbose_name = "National Council Head"
+        verbose_name_plural = "National Council Head List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
@@ -178,6 +193,9 @@ class NationalCouncilHead(models.Model):
 
 
 class ExecutiveCommitteHead(models.Model):
+    class Meta:
+        verbose_name = "Executive Committee Head"
+        verbose_name_plural = "Executive Committee Head List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
@@ -214,6 +232,9 @@ class ExecutiveCommitteHead(models.Model):
 
 
 class OfficersHead(models.Model):
+    class Meta:
+        verbose_name = "Officers Head"
+        verbose_name_plural = "Officers Head List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
@@ -250,6 +271,9 @@ class OfficersHead(models.Model):
 
 
 class OfficersSpokesPerson(models.Model):
+    class Meta:
+        verbose_name = "Officers Spokes Person"
+        verbose_name_plural = "Officers Spokes Person List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
@@ -286,6 +310,9 @@ class OfficersSpokesPerson(models.Model):
 
 
 class InformationOfficer(models.Model):
+    class Meta:
+        verbose_name = "Information Officer Person"
+        verbose_name_plural = "Information Officers List"
     designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)

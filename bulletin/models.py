@@ -58,6 +58,7 @@ class Bulletin(models.Model):
                 old_instance.image.delete(save=False)
             if self.file != old_instance.file:
                 old_instance.file.delete(save=False)
+        # ra
         self.slug = slugify(self.title)
         super(Bulletin, self).save(*args, **kwargs)
 

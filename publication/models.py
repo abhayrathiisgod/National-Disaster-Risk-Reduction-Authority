@@ -57,6 +57,9 @@ class PublicationAuthor(models.Model):
 
 
 class Publications(models.Model):
+    class Meta:
+        verbose_name = "Publication"
+        verbose_name_plural = "Publications"
     pub_type = models.ForeignKey(PublicationType, on_delete=models.PROTECT)
     pub_author = models.ForeignKey(PublicationAuthor, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
@@ -99,6 +102,7 @@ class Publications(models.Model):
                 old_instance.pdffile.delete(save=False)
 
         super(Publications, self).save(*args, **kwargs)
+    # change
 
     def extract_first_page_as_image(self):
         if self.pdffile:

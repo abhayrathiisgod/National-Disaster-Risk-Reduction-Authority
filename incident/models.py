@@ -7,6 +7,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Loss(models.Model):
+    class Meta:
+        verbose_name = "Loss"
+        verbose_name_plural = "Losses"
     peopleDeathCount = models.IntegerField(default=0)
     peopleDeathMaleCount = models.IntegerField(default=0)
     peopleDeathFemaleCount = models.IntegerField(default=0)
@@ -54,6 +57,7 @@ class Loss(models.Model):
 
 
 class Incident(models.Model):
+
     title = models.CharField(max_length=255)
     point = models.CharField(max_length=255)
     createdOn = models.DateTimeField()

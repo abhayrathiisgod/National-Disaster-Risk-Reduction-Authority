@@ -13,6 +13,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Province(models.Model):
+    class Meta:
+        verbose_name = "Province"
+        verbose_name_plural = "Provinces"
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province_name = models.CharField(max_length=100)
@@ -24,6 +27,10 @@ class Province(models.Model):
 
 
 class District(models.Model):
+
+    class Meta:
+        verbose_name = "District"
+        verbose_name_plural = "Districts"
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
@@ -36,6 +43,10 @@ class District(models.Model):
 
 
 class Municipality(models.Model):
+
+    class Meta:
+        verbose_name = "Municipality"
+        verbose_name_plural = "Municipalities"
     # bbox = models.PolygonField()
     # centroid = models.ForeignKey(centroid, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)

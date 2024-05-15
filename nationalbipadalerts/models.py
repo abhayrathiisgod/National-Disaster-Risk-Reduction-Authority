@@ -6,6 +6,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class ImportantLinks(models.Model):
+    class Meta:
+        verbose_name = "Important Link"
+        verbose_name_plural = "Important Link List"
     name = models.CharField(max_length=255)
     link = models.URLField()
 
@@ -14,6 +17,10 @@ class ImportantLinks(models.Model):
 
 
 class BipadAlerts(models.Model):
+    class Meta:
+        verbose_name = "Bipad Alert"
+        verbose_name_plural = "Bipad Alert List"
+
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     description = CKEditor5Field(

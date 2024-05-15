@@ -4,6 +4,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Hazards(models.Model):
+    class Meta:
+        verbose_name = "Hazard"
+        verbose_name_plural = "Hazards"
     title = models.CharField(max_length=255)
     title_en = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)

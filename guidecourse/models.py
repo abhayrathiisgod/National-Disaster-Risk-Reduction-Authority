@@ -5,6 +5,9 @@ from django.utils.safestring import mark_safe
 
 
 class GuideCourse(models.Model):
+    class Meta:
+        verbose_name = "Gallery"
+        verbose_name_plural = "Galleries"
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
@@ -38,6 +41,9 @@ class GuideCourse(models.Model):
 
 
 class Guidechildren(models.Model):
+    class Meta:
+        verbose_name = "Guide Children"
+        verbose_name_plural = "Guide Childrens"
     parent = models.ManyToManyField(
         'GuideCourse', related_name='children', blank=True)
     name = models.CharField(max_length=255)
@@ -75,6 +81,9 @@ class Guidechildren(models.Model):
 
 
 class Course(models.Model):
+    class Meta:
+        verbose_name = "Course"
+        verbose_name_plural = "Courses"
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     path = models.URLField()

@@ -25,6 +25,7 @@ class Type(models.Model):
 
 
 class NewsInfo(models.Model):
+
     id = models.AutoField(primary_key=True)
     # author = models.ForeignKey(Author, on_delete=models.DO_NOTHING, null=True)
     # type = models.ForeignKey(Type, on_delete=models.DO_NOTHING, null=True)

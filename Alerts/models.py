@@ -7,6 +7,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class AlertList(models.Model):
+    class Meta:
+        verbose_name = "Alert"
+        verbose_name_plural = "Alerts"
     title = models.CharField(max_length=255)
     wards = models.ForeignKey(Ward, on_delete=models.PROTECT, default=101)
     point = models.CharField()

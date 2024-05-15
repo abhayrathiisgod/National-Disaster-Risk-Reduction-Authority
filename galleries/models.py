@@ -4,6 +4,9 @@ from django.utils.safestring import mark_safe
 
 
 class Gallery(models.Model):
+    class Meta:
+        verbose_name = "Gallery"
+        verbose_name_plural = "Galleries"
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     image = models.ImageField(upload_to='uploads/gallery/display_image/')
@@ -19,6 +22,9 @@ class Gallery(models.Model):
 
 
 class GalleryImage(models.Model):
+    class Meta:
+        verbose_name = "Gallery Image"
+        verbose_name_plural = "Gallery Images"
     gallery = models.ForeignKey(
         Gallery, on_delete=models.PROTECT, related_name='images')
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -55,6 +61,9 @@ class GalleryImage(models.Model):
 
 
 class VideoGallery(models.Model):
+    class Meta:
+        verbose_name = "Video Gallery"
+        verbose_name_plural = "Video Galleries"
     youtube_url = models.URLField()
 
     def __str__(self) -> str:

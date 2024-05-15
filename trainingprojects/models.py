@@ -7,6 +7,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Address(models.Model):
+    class Meta:
+        verbose_name = "Address"
+        verbose_name_plural = "Addresses"
     local_address = models.TextField()
     local_address_ne = models.TextField()
 

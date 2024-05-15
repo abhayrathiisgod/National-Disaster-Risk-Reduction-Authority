@@ -18,7 +18,7 @@ urlpatterns = [
     path('api/v1/alerts/', include('Alerts.urls')),
     path('api/v1/hazards/', include('hazard.urls')),
     path('api/v1/incidents/', include('incident.urls')),
-    path('api/v1/officerprofileinofs/', include('profiles.urls')),
+    path('api/v1/officerprofileinfos/', include('profiles.urls')),
     path('api/v1/nationalbipadalerts/', include('nationalbipadalerts.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]

@@ -3,7 +3,6 @@ from publication.models import Publications
 import os
 from django.core.validators import FileExtensionValidator
 from django_ckeditor_5.fields import CKEditor5Field
-from PyPDF2 import PdfFileReader
 from pdf2image import convert_from_path
 from django.db import models
 from io import BytesIO
@@ -13,6 +12,9 @@ from django.utils.safestring import mark_safe
 
 
 class ContactDetail(models.Model):
+    class Meta:
+        verbose_name = "Contact Detail"
+        verbose_name_plural = "Contact Detail List"
     detail = CKEditor5Field('Text', config_name='extends')
     detail_ne = CKEditor5Field('Text', config_name='extends')
 
@@ -88,6 +90,9 @@ class WardDocument(models.Model):
 
 
 class FrequentlyAskedQuestions(models.Model):
+    class Meta:
+        verbose_name = "Frequently Asked Question"
+        verbose_name_plural = "Frequently Asked Questions"
     question = CKEditor5Field('Text', config_name='extends')
     question_ne = CKEditor5Field('Text', config_name='extends')
     answer = CKEditor5Field('Text', config_name='extends')
@@ -125,6 +130,9 @@ class Page(models.Model):
 
 
 class Bookmarks(models.Model):
+    class Meta:
+        verbose_name = "Bookmark"
+        verbose_name_plural = "Bookmarks"
     name = models.TextField()
     name_ne = models.TextField()
     link = models.URLField()
@@ -166,6 +174,34 @@ class HomePageBanner(models.Model):
     image = models.ImageField(upload_to='uploads/homepage/banner', validators=[
                               FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                                          "png"])])
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = HomePageBanner.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(HomePageBanner, self).save(*args, **kwargs)
+
+    def image_preview(self):
+        if self.image:
+            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
+        else:
+            return '(No image)'
+
+
+class NdrmaPortals(models.Model):
+    class Meta:
+        verbose_name = "Ndrma Portal"
+        verbose_name_plural = "Ndrma Portals List"
+
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='ndrmaPortal/icons/')
+    realted_link = models.URLField()
 
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)

@@ -7,6 +7,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 
 class ProvinceWiseFocalPersonContactList(models.Model):
+    class Meta:
+        verbose_name = "Province Wise Focal Person Contact"
+        verbose_name_plural = "Province Wise Focal Person Contact List"
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     designation = models.CharField(max_length=255)
     designation_ne = models.CharField(max_length=255)
@@ -29,6 +32,9 @@ class ProvinceWiseFocalPersonContactList(models.Model):
 
 
 class MohaPhoneDirectoryList(models.Model):
+    class Meta:
+        verbose_name = "Moha Phone Directory"
+        verbose_name_plural = "Moha Phone Directory List"
     division_section = CKEditor5Field('Text', config_name='extends')
     division_section_ne = CKEditor5Field('Text', config_name='extends')
     phone = models.CharField(blank=True, max_length=255)
@@ -39,6 +45,9 @@ class MohaPhoneDirectoryList(models.Model):
 
 
 class MohaSubordinateList(models.Model):
+    class Meta:
+        verbose_name = "Moha Subordinate"
+        verbose_name_plural = "Moha Subordinate List"
     name = CKEditor5Field('Text', config_name='extends')
     name_ne = CKEditor5Field('Text', config_name='extends')
     address = CKEditor5Field('Text', config_name='extends')
@@ -49,6 +58,9 @@ class MohaSubordinateList(models.Model):
 
 
 class DeocHeadList(models.Model):
+    class Meta:
+        verbose_name = "Deoc Head"
+        verbose_name_plural = "Deoc Head List"
     designation = models.CharField(max_length=255)
     designation_ne = models.CharField(max_length=255)
     office_landline_no = models.CharField(max_length=255)
@@ -60,6 +72,9 @@ class DeocHeadList(models.Model):
 
 
 class LocalDisasterManagementContactList(models.Model):
+    class Meta:
+        verbose_name = "Local Disaster Management Contact"
+        verbose_name_plural = "Local Disaster Management Contact List"
     email = models.EmailField()
     contact_num = models.CharField(max_length=255)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
@@ -71,6 +86,9 @@ class LocalDisasterManagementContactList(models.Model):
 
 
 class SnakeBites(models.Model):
+    class Meta:
+        verbose_name = "Snake Bite"
+        verbose_name_plural = "Snake Bite List"
     treatment_centre = models.CharField(max_length=255)
     treatment_centre_ne = models.CharField(max_length=255)
     district = models.ForeignKey(District, on_delete=models.PROTECT)

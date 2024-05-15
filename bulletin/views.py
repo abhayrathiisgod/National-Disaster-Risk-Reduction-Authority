@@ -13,6 +13,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 # 3. returns date wise descending
 
 
+# viewsets
 class BulletinList(generics.ListAPIView):
     queryset = Bulletin.objects.all()
     serializer_class = BulletinSerializer
@@ -21,10 +22,13 @@ class BulletinList(generics.ListAPIView):
     filterset_fields = ['bulletin_type']
 
 
+##
 class BulletindailylList(generics.ListAPIView):
     queryset = Bulletin.objects.filter(bulletin_type__id=1)
     serializer_class = BulletinSerializer
     pagination_class = PaginationClass
+
+##
 
 
 class BulletinNationalList(generics.ListAPIView):
