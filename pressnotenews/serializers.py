@@ -33,5 +33,5 @@ class PressNoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PressNote
-        fields = ['id', 'author', 'type', 'title', 'title_ne', 'description', 'description_ne',
+        fields = ['id', 'title', 'title_ne', 'description', 'description_ne',
                   'summary', 'summary_ne', 'date', 'image', 'file', 'is_published', 'author_details', 'type_details']

@@ -13,6 +13,9 @@ class ProvinceWiseFocalPersonContactViewSet(viewsets.ModelViewSet):
     queryset = ProvinceWiseFocalPersonContactList.objects.all()
     serializer_class = ProvinceWiseFocalPersonContactSerializer
     pagination_class = LimitOffsetPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['province']
+    lookup_field = 'pk'
 
 
 class DeocHeadViewSet(viewsets.ModelViewSet):
@@ -42,6 +45,8 @@ class MohaPhoneDirectoryViewSet(viewsets.ModelViewSet):
 class SnakeBitesViewSet(viewsets.ModelViewSet):
     queryset = SnakeBites.objects.all()
     serializer_class = SnakeBiteSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['district']
     pagination_class = LimitOffsetPagination
 
 

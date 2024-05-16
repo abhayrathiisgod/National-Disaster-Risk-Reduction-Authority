@@ -6,34 +6,30 @@ from pressnotenews.serializers import ALLNewsInfoSerializer, SpecificNewsInfoSer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 
-class NewsInfoViewsetList(generics.ListAPIView):
+class NewsInfoViewSet(viewsets.ModelViewSet):
     queryset = NewsInfo.objects.all()
-    serializer_class = ALLNewsInfoSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['title']
     filterset_fields = ['date']
     pagination_class = LimitOffsetPagination
 
-
-class NewsInfoViewsetInstance(generics.ListAPIView):
-    serializer_class = SpecificNewsInfoSerializer
-    lookup_field = 'pk'
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        queryset = NewsInfo.objects.filter(id=pk)
-        return queryset
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ALLNewsInfoSerializer
+        elif self.action == 'retrieve':
+            return SpecificNewsInfoSerializer
+        return ALLNewsInfoSerializer
 
 
-class PressNoteListAPIView(generics.ListAPIView):
+class PressNoteAPIView(viewsets.ModelViewSet):
     queryset = PressNote.objects.all()
     serializer_class = PressNoteSerializer
     pagination_class = LimitOffsetPagination
-
-
-class PressNoteAPIView(generics.RetrieveAPIView):
-    queryset = PressNote.objects.all()
-    serializer_class = PressNoteSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['title']
+    filterset_fields = ['date']
     lookup_field = 'pk'

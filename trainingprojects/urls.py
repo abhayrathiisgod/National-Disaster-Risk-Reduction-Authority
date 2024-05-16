@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import ProjectInstance, ProjectListView, TrainingAnalyticView, TrainingView
+from .views import ProjectListView, TrainingAnalyticView, TrainingView
 
 urlpatterns = [
-    path('projects/', ProjectListView.as_view()),
-    path('projects/<int:pk>/', ProjectInstance.as_view()),
-    path('trainings/', TrainingView.as_view()),
+    path('projects/', ProjectListView.as_view({'get': 'list'})),
+    path('projects/<int:pk>/',  ProjectListView.as_view({'get': 'retrieve'})),
+    path('trainings/', TrainingView.as_view({'get': 'list'})),
+    path('trainings/<int:pk>/', TrainingView.as_view({'get': 'retreive'})),
     path('analytics/', TrainingAnalyticView.as_view()),
 ]

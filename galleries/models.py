@@ -18,6 +18,15 @@ class Gallery(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = Gallery.objects.get(pk=self.pk)
+            if self.image != old_instance.image:
+                old_instance.image.delete(save=False)
+
+        super(Gallery, self).save(*args, **kwargs)
+
     def image_preview(self):
         if self.image:
             return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
@@ -77,5 +86,9 @@ class VideoGallery(models.Model):
 
 @receiver(pre_delete, sender=GalleryImage)
 def delete_gallery_image_file(sender, instance, **kwargs):
-    # Delete the associated image file when a GalleryImage instance is deleted
+    instance.image.delete(save=False)
+
+
+@receiver(pre_delete, sender=Gallery)
+def delete_gallery_image_file(sender, instance, **kwargs):
     instance.image.delete(save=False)

@@ -4,11 +4,10 @@ from .models import PublicationAuthor, Publications, PublicationType
 
 
 class PublicationTypeAdmin(admin.ModelAdmin):
+
     actions = None
     list_display = ('id', 'publication_type', 'publication_type_ne')
     list_display_links = ('id', 'publication_type', 'publication_type_ne')
-    list_filter = ('publication_type',)
-    search_fields = ('publication_type', 'title')
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
@@ -24,7 +23,6 @@ class PublicationAuthorAdmin(admin.ModelAdmin):
     actions = None
     list_display = ('id', 'publication_author', 'publication_author_ne')
     list_display_links = ('id', 'publication_author', 'publication_author_ne')
-    search_fields = ('publication_author',)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
@@ -37,10 +35,10 @@ class PublicationAuthorAdmin(admin.ModelAdmin):
 
 
 class PublicationsAdmin(admin.ModelAdmin):
-    actions = None
     list_display = ('id', 'pub_type', 'title', 'date', 'is_published')
     list_display_links = ('id', 'title', 'date', 'is_published')
-    list_filter = ('pub_type', 'id', 'date', 'is_published')
+    list_filter = ('pub_type', 'date', 'is_published')
+    readonly_fields = ('slug', 'image')
     search_fields = ('title',)
 
     def has_delete_permission(self, request, obj=None):
@@ -59,17 +57,18 @@ class PublicationsAdmin(admin.ModelAdmin):
         return False
 
     def get_form(self, request, obj=None, **kwargs):
+
         form = super(PublicationsAdmin, self).get_form(request, obj, **kwargs)
 
-        # Restrict options for pub_type field
         pub_type_field = form.base_fields.get("pub_type")
+
         if pub_type_field:
             pub_type_field.widget.can_add_related = False
             pub_type_field.widget.can_change_related = False
             pub_type_field.widget.can_delete_related = False
 
-        # Restrict options for pub_author field
         pub_author_field = form.base_fields.get("pub_author")
+
         if pub_author_field:
             pub_author_field.widget.can_add_related = False
             pub_author_field.widget.can_change_related = False

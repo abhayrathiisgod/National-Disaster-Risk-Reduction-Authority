@@ -10,6 +10,13 @@ class ImportantLInksSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class BipadAlertsListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.BipadAlerts
+        fields = '__all__'
+
+
 class BipadAlertsSerializer(serializers.ModelSerializer):
     important_links = ImportantLInksSerializer(many=True)
     important_numbers = OfficerProfileforalertSerializer(many=True)

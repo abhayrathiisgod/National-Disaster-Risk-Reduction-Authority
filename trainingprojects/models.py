@@ -18,41 +18,27 @@ class Address(models.Model):
 
 
 class Donater(models.Model):
-    donater_created_at = models.DateTimeField()
-    donater_updated_at = models.DateTimeField()
-    donater_deleted_at = models.DateTimeField(blank=True, null=True)
-    name = CKEditor5Field('Text', config_name='extends')
+    donater_created_at = models.DateTimeField(blank=True, null=True)
+    donater_updated_at = models.DateTimeField(blank=True, null=True)
+    name = models.CharField(max_length=255)
     icon = models.ImageField(upload_to='uploads/donater/icon', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
     link = models.URLField()
     donater_created_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name='created_donaters')
+        User, on_delete=models.PROTECT, blank=True, null=True, related_name='created_donaters')
     donater_updated_by = models.ForeignKey(
         User, on_delete=models.SET_NULL, blank=True, null=True, related_name='updated_donaters')
 
     def __str__(self) -> str:
         return self.name
 
-    def delete(self, *args, **kwargs):
-        self.icon.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_instance = Donater.objects.get(pk=self.pk)
-            if self.icon != old_instance.icon:
-                old_instance.icon.delete(save=False)
-
-        super(Donater, self).save(*args, **kwargs)
-
 
 class Project(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     donor = models.ForeignKey(Donater, on_delete=models.PROTECT)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    deleted_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True,)
+    updated_at = models.DateTimeField(blank=True, null=True,)
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     budget = models.CharField(max_length=50)

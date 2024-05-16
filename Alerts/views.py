@@ -1,10 +1,9 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import AlertList
 from .serializers import AlertListSerializer
 from rest_framework import filters
 import django_filters
-from django_ckeditor_5.fields import CKEditor5Field
 
 
 class DescriptionFilter(django_filters.CharFilter):
@@ -12,7 +11,7 @@ class DescriptionFilter(django_filters.CharFilter):
     lookup_expr = 'icontains'
 
 
-class AlertListView(generics.ListAPIView):
+class AlertView(viewsets.ModelViewSet):
     queryset = AlertList.objects.all()
     serializer_class = AlertListSerializer
     filter_backends = [filters.SearchFilter,
@@ -22,9 +21,4 @@ class AlertListView(generics.ListAPIView):
     search_fields = ['title', 'titleNe', 'source',
                      'polygon', 'referenceType', 'referenceData', 'region']
     ordering_fields = ['id', 'title', 'createdOn', 'expireOn', 'regionId']
-
-
-class AlertInstanceView(generics.RetrieveAPIView):
-    queryset = AlertList.objects.all()
-    serializer_class = AlertListSerializer
     lookup_field = 'pk'

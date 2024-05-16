@@ -15,22 +15,22 @@ class ContactDetail(models.Model):
     class Meta:
         verbose_name = "Contact Detail"
         verbose_name_plural = "Contact Detail List"
-    detail = CKEditor5Field('Text', config_name='extends')
-    detail_ne = CKEditor5Field('Text', config_name='extends')
+    detail = CKEditor5Field('Detail', config_name='extends')
+    detail_ne = CKEditor5Field('Detail_ne', config_name='extends')
 
     def __str__(self) -> str:
         return self.detail
 
 
 class Introduction(models.Model):
-    title = CKEditor5Field('Text', config_name='extends')
-    title_ne = CKEditor5Field('Text', config_name='extends')
-    description = CKEditor5Field('Text', config_name='extends')
-    description_ne = CKEditor5Field('Text', config_name='extends')
-    sub_title = CKEditor5Field('Text', config_name='extends')
-    sub_title_ne = CKEditor5Field('Text', config_name='extends')
-    content = CKEditor5Field('Text', config_name='extends')
-    content_ne = CKEditor5Field('Text', config_name='extends')
+    title = CKEditor5Field('title', config_name='extends')
+    title_ne = CKEditor5Field('title_ne', config_name='extends')
+    description = CKEditor5Field('description_ne', config_name='extends')
+    description_ne = CKEditor5Field('description_ne', config_name='extends')
+    sub_title = CKEditor5Field('subtitle', config_name='extends')
+    sub_title_ne = CKEditor5Field('subtitle_ne', config_name='extends')
+    content = CKEditor5Field('content', config_name='extends')
+    content_ne = CKEditor5Field('content_ne', config_name='extends')
 
     def __str__(self) -> str:
         return self.title
@@ -44,35 +44,6 @@ class WardDocument(models.Model):
     image = models.ImageField(
         upload_to='uploads/ward_document_images', blank=True, null=True)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.document:
-            _, extension = os.path.splitext(self.document.name)
-            self.file_extension = extension
-            if extension.lower() == '.pdf':
-                image_data = self.extract_first_page_as_image()
-                if image_data:
-                    self.image.save('first_page.jpg', image_data, save=False)
-
-        super().save(*args, **kwargs)
-
-    def extract_first_page_as_image(self):
-        if self.document:
-            images = convert_from_path(self.document.path)
-            if images:
-                first_page_image = images[0]
-
-                img_io = BytesIO()
-                first_page_image.save(img_io, format='JPEG')
-                img_io.seek(0)
-
-                img_file = InMemoryUploadedFile(
-                    img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
-
-                return img_file
-
-        return None
-
     def __str__(self):
         return self.filename
 
@@ -82,51 +53,33 @@ class WardDocument(models.Model):
         self.document.delete(save=False)
         super().delete(*args, **kwargs)
 
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
-
 
 class FrequentlyAskedQuestions(models.Model):
     class Meta:
         verbose_name = "Frequently Asked Question"
         verbose_name_plural = "Frequently Asked Questions"
-    question = CKEditor5Field('Text', config_name='extends')
-    question_ne = CKEditor5Field('Text', config_name='extends')
-    answer = CKEditor5Field('Text', config_name='extends')
-    answer_ne = CKEditor5Field('Text', config_name='extends')
+    question = CKEditor5Field('question', config_name='extends')
+    question_ne = CKEditor5Field('question_ne', config_name='extends')
+    answer = CKEditor5Field('answer', config_name='extends')
+    answer_ne = CKEditor5Field('answer_ne', config_name='extends')
 
     def __str__(self) -> str:
         return self.question
 
 
 class Page(models.Model):
-    title = CKEditor5Field('Text', config_name='extends')
-    title_ne = CKEditor5Field('Text', config_name='extends')
+    title = CKEditor5Field('title', config_name='extends')
+    title_ne = CKEditor5Field('title_ne', config_name='extends')
     featured_image = models.ImageField(
         upload_to='uploads/page/featured_image', null=True, blank=True, validators=[
             FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                        "png"])])
-    description = CKEditor5Field('Text', config_name='extends')
-    description_ne = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('description', config_name='extends')
+    description_ne = CKEditor5Field('description_ne', config_name='extends')
     slug = models.SlugField()
 
     def __str__(self) -> str:
         return self.title
-
-    def delete(self, *args, **kwargs):
-        self.featured_image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_instance = Page.objects.get(pk=self.pk)
-            if self.featured_image != old_instance.featured_image:
-                old_instance.featured_image.delete(save=False)
-
-        super(Page, self).save(*args, **kwargs)
 
 
 class Bookmarks(models.Model):
@@ -187,12 +140,6 @@ class HomePageBanner(models.Model):
 
         super(HomePageBanner, self).save(*args, **kwargs)
 
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
-
 
 class NdrmaPortals(models.Model):
     class Meta:
@@ -203,20 +150,5 @@ class NdrmaPortals(models.Model):
     image = models.ImageField(upload_to='ndrmaPortal/icons/')
     realted_link = models.URLField()
 
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_instance = HomePageBanner.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(HomePageBanner, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
+    def __str__(self):
+        return self.name

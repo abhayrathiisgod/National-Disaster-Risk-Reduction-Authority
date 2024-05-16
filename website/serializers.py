@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from .models import HomePageBanner, ContactDetail, Introduction, WardDocument, ContactForm, FrequentlyAskedQuestions, Page, Bookmarks, Menu
+from .models import HomePageBanner, ContactDetail, NdrmaPortals, Introduction, WardDocument, ContactForm, FrequentlyAskedQuestions, Page, Bookmarks, Menu
 
 
 class ContactDetailSerializer(serializers.ModelSerializer):
@@ -66,4 +66,10 @@ class ContactSerializer(serializers.ModelSerializer):
 class HomePageBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomePageBanner
+        fields = '__all__'
+
+
+class NdrmaportalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NdrmaPortals
         fields = '__all__'

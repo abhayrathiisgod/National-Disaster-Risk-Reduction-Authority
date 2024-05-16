@@ -35,7 +35,7 @@ urlpatterns = [
     path('snakebite/<int:pk>/', SnakeBitesViewSet.as_view(
         {'get': 'retrieve'}), name='snakebite-detail'),
     path('EmergencyVehicle/', EmergencyVehicleViewSet.as_view(
-        {'get': 'list'}), name='ambulance-list'),
+        {'get': 'list'}), name='emergency-vehicle-list'),
     path('EmergencyVehicleViewSet/<int:pk>/', EmergencyVehicleViewSet.as_view(
-        {'get': 'retrieve'}), name='ambulance-detail'),
+        {'get': 'retrieve'}), name='emergency-vehicle-detail'),
 ]

@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import ImportantLinksList, BipadAlertsList, BipadAlertView
+from .views import BipadAlertsView
 
 urlpatterns = [
-    path('nationalbipadalerts/', BipadAlertsList.as_view(),
+    path('nationalbipadalerts/', BipadAlertsView.as_view({'get': 'list'}),
          name='nationalbipadalerts'),
-    path('nationalbipadalerts/<int:pk>', BipadAlertView.as_view(),
+    path('nationalbipadalerts/<int:pk>/', BipadAlertsView.as_view({'get': 'retrieve'}),
          name='nationalbipadalerts_detail'),
 
 ]

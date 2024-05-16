@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpRequest
-from website.models import Page, ContactDetail, Introduction, WardDocument, ContactForm, HomePageBanner, FrequentlyAskedQuestions, Bookmarks, Menu
+from website.models import Page, NdrmaPortals, ContactDetail, Introduction, WardDocument, ContactForm, HomePageBanner, FrequentlyAskedQuestions, Bookmarks, Menu
 
 
 class ContactDetailAdmin(admin.ModelAdmin):
@@ -9,11 +9,9 @@ class ContactDetailAdmin(admin.ModelAdmin):
     search_fields = ('detail',)
 
     def has_delete_permission(self, request, obj=None):
-
         return False
 
     def has_add_permission(self, request, obj=None):
-
         return False
 
     def has_change_permission(self, request: HttpRequest, obj=None) -> bool:
@@ -189,6 +187,26 @@ class HomePageBannerAdmin(admin.ModelAdmin):
         return False
 
 
+class NdrmaPortalsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        return HomePageBanner.objects.count() <= 2
+
+    def has_change_permission(self, request: HttpRequest, obj=None) -> bool:
+        if request.user.is_superuser:
+            return True
+        return False
+
+
 admin.site.register(ContactDetail, ContactDetailAdmin)
 admin.site.register(Introduction, IntroductionAdmin)
 admin.site.register(WardDocument, WardDocumentAdmin)
@@ -198,3 +216,4 @@ admin.site.register(Bookmarks, BookmarksAdmin)
 admin.site.register(Menu, MenuAdmin)
 admin.site.register(ContactForm, ContactFormAdmin)
 admin.site.register(HomePageBanner, HomePageBannerAdmin)
+admin.site.register(NdrmaPortals, NdrmaPortalsAdmin)

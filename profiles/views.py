@@ -1,176 +1,112 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from .models import Skills, Designation, Department, TrainingOrg, TrainingCertificate, Trainings, OfficerProfile, CommiteProfile, NationalCouncilHead, ExecutiveCommitteHead, OfficersHead, OfficersSpokesPerson, InformationOfficer
-from profiles.serializers import SkillsSerializer, DesignationSerializer, DepartmentSerializer, TrainingOrgSerializer, TrainingCertificateSerializer, TrainingsSerializer, OfficerProfileSerializer, CommiteProfileSerializer, NationalCouncilHeadSerializer, ExecutiveCommitteHeadSerializer, OfficersHeadSerializer, OfficersSpokesPersonSerializer, InformationOfficerSerializer
+from profiles.serializers import SkillsSerializer, OfficerProfileListSerializer, DesignationSerializer, DepartmentSerializer, TrainingOrgSerializer, TrainingCertificateSerializer, TrainingsSerializer, OfficerProfileSerializer, CommiteProfileSerializer, NationalCouncilHeadSerializer, ExecutiveCommitteHeadSerializer, OfficersHeadSerializer, OfficersSpokesPersonSerializer, InformationOfficerSerializer
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import render, get_object_or_404
 
 
-class SkillsListAPIView(generics.ListAPIView):
+class SkillsAPIView(viewsets.ModelViewSet):
     queryset = Skills.objects.all()
     serializer_class = SkillsSerializer
     pagination_class = LimitOffsetPagination
-
-
-class SkillsAPIView(generics.RetrieveAPIView):
-    queryset = Skills.objects.all()
-    serializer_class = SkillsSerializer
     lookup_field = 'pk'
 
 
-class DesignationListAPIView(generics.ListAPIView):
+class DesignationAPIView(viewsets.ModelViewSet):
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
     pagination_class = LimitOffsetPagination
-
-
-class DesignationAPIView(generics.RetrieveAPIView):
-    queryset = Designation.objects.all()
-    serializer_class = DesignationSerializer
     lookup_field = 'pk'
 
 
-class DepartmentListAPIView(generics.ListAPIView):
+class DepartmentAPIView(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     pagination_class = LimitOffsetPagination
-
-
-class DepartmentAPIView(generics.RetrieveAPIView):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
     lookup_field = 'pk'
 
 
-class TrainingOrgListAPIView(generics.ListAPIView):
+class TrainingOrgAPIView(viewsets.ModelViewSet):
     queryset = TrainingOrg.objects.all()
     serializer_class = TrainingOrgSerializer
     pagination_class = LimitOffsetPagination
-
-
-class TrainingOrgAPIView(generics.RetrieveAPIView):
-    queryset = TrainingOrg.objects.all()
-    serializer_class = TrainingOrgSerializer
     lookup_field = 'pk'
 
 
-class TrainingCertificateListAPIView(generics.ListAPIView):
+class TrainingCertificateAPIView(viewsets.ModelViewSet):
     queryset = TrainingCertificate.objects.all()
     serializer_class = TrainingCertificateSerializer
     pagination_class = LimitOffsetPagination
-
-
-class TrainingCertificateAPIView(generics.RetrieveAPIView):
-    queryset = TrainingCertificate.objects.all()
-    serializer_class = TrainingCertificateSerializer
     lookup_field = 'pk'
 
 
-class TrainingsListAPIView(generics.ListAPIView):
+class TrainingsAPIView(viewsets.ModelViewSet):
     queryset = Trainings.objects.all()
     serializer_class = TrainingsSerializer
     pagination_class = LimitOffsetPagination
-
-
-class TrainingsAPIView(generics.RetrieveAPIView):
-    queryset = Trainings.objects.all()
-    serializer_class = TrainingsSerializer
     lookup_field = 'pk'
 
 
-class OfficerProfileListAPIView(generics.ListAPIView):
+class OfficerProfileAPIView(viewsets.ModelViewSet):
     queryset = OfficerProfile.objects.all().order_by('order')
-    serializer_class = OfficerProfileSerializer
     pagination_class = LimitOffsetPagination
-
-
-class OfficerProfileAPIView(generics.RetrieveAPIView):
-    queryset = OfficerProfile.objects.all()
-    serializer_class = OfficerProfileSerializer
     lookup_field = 'pk'
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return OfficerProfileListSerializer
+        elif self.action == 'retrieve':
+            return OfficerProfileSerializer
+        return OfficerProfileSerializer
 
-class CommiteProfileListAPIView(generics.ListAPIView):
+
+class CommiteProfileAPIView(viewsets.ModelViewSet):
     queryset = CommiteProfile.objects.all().order_by('order')
     serializer_class = CommiteProfileSerializer
     pagination_class = LimitOffsetPagination
-
-
-class CommiteProfileInstanceView(generics.RetrieveAPIView):
-    queryset = CommiteProfile.objects.all()
-    serializer_class = CommiteProfileSerializer
     lookup_field = 'pk'
 
 
-class NationalCouncilHeadListAPIView(generics.ListAPIView):
+class NationalCouncilHeadAPIView(viewsets.ModelViewSet):
     queryset = NationalCouncilHead.objects.all().order_by('order')
     serializer_class = NationalCouncilHeadSerializer
     pagination_class = LimitOffsetPagination
-
-
-class NationalCouncilHeadAPIView(generics.RetrieveAPIView):
-    queryset = NationalCouncilHead.objects.all()
-    serializer_class = NationalCouncilHeadSerializer
     lookup_field = 'pk'
 
 
-class ExecutiveCommitteHeadListAPIView(generics.ListAPIView):
+class ExecutiveCommitteHeadAPIView(viewsets.ModelViewSet):
     queryset = ExecutiveCommitteHead.objects.all().order_by('order')
     serializer_class = ExecutiveCommitteHeadSerializer
     pagination_class = LimitOffsetPagination
-
-
-class ExecutiveCommitteHeadAPIView(generics.RetrieveAPIView):
-    queryset = ExecutiveCommitteHead.objects.all()
-    serializer_class = ExecutiveCommitteHeadSerializer
     lookup_field = 'pk'
 
 
-class OfficersHeadListAPIView(generics.ListAPIView):
+class OfficersHeadAPIView(viewsets.ModelViewSet):
     queryset = OfficersHead.objects.all().order_by('order')
     serializer_class = OfficersHeadSerializer
     pagination_class = LimitOffsetPagination
-
-
-class OfficersHeadAPIView(generics.RetrieveAPIView):
-    queryset = OfficersHead.objects.all()
-    serializer_class = OfficersHeadSerializer
     lookup_field = 'pk'
 
 
-class OfficersSpokesPersonListAPIView(generics.ListAPIView):
+class OfficersSpokesPersonAPIView(viewsets.ModelViewSet):
     queryset = OfficersSpokesPerson.objects.all().order_by('order')
     serializer_class = OfficersSpokesPersonSerializer
     pagination_class = LimitOffsetPagination
-
-
-class OfficersSpokesPersonAPIView(generics.RetrieveAPIView):
-    queryset = OfficersSpokesPerson.objects.all()
-    serializer_class = OfficersSpokesPersonSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['designation']
     lookup_field = 'pk'
 
 
-class InformationOfficerListAPIView(generics.ListAPIView):
+class InformationOfficerAPIView(viewsets.ModelViewSet):
     queryset = InformationOfficer.objects.all().order_by('order')
     serializer_class = InformationOfficerSerializer
     pagination_class = LimitOffsetPagination
-
-
-class InformationOfficerAPIView(generics.RetrieveAPIView):
-    queryset = InformationOfficer.objects.all()
-    serializer_class = InformationOfficerSerializer
-    lookup_field = 'pk'
-
-
-class OfficerProfileView(generics.ListAPIView):
-    queryset = OfficerProfile.objects.all().order_by('order')
-    serializer_class = OfficerProfileSerializer
-    pagination_class = LimitOffsetPagination
-
-
-class OfficerProfileInstanceView(generics.RetrieveAPIView):
-    queryset = OfficerProfile.objects.all()
-    serializer_class = OfficerProfileSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['designation']
     lookup_field = 'pk'
 
 

@@ -1,22 +1,15 @@
 from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import Page, Introduction, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu, HomePageBanner
-from .serializers import PageSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, HomePageBannerSerializer, BookmarksSerializer, MenuSerializer
+from .models import Page, Introduction, NdrmaPortals, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu, HomePageBanner
+from .serializers import PageSerializer, NdrmaportalSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, HomePageBannerSerializer, BookmarksSerializer, MenuSerializer
 from rest_framework.response import Response
 # Create your views here.
 
 
-class IntroductionView(generics.ListAPIView):
+class IntroductionView(viewsets.ModelViewSet):
     queryset = Introduction.objects.all()
     serializer_class = IntroductionSerializer
-    pagination_class = None
-
-
-class IntroductionDetailView(generics.RetrieveAPIView):
-    queryset = Introduction.objects.all()
-    serializer_class = IntroductionSerializer
-    pagination_class = None
     lookup_field = 'pk'
 
 
@@ -26,29 +19,15 @@ class ContactDetailView(generics.ListAPIView):
     pagination_class = None
 
 
-class WardDocumentView(generics.ListAPIView):
+class WardDocumentView(viewsets.ModelViewSet):
     queryset = WardDocument.objects.all()
     serializer_class = WardDocumentSerializer
-    pagination_class = None
-
-
-class WardDocumentDetailView(generics.RetrieveAPIView):
-    queryset = WardDocument.objects.all()
-    serializer_class = WardDocumentSerializer
-    pagination_class = None
     lookup_field = 'pk'
 
 
-class FrequentlyAskedQuestionsView(generics.ListAPIView):
+class FrequentlyAskedQuestionsView(viewsets.ModelViewSet):
     queryset = FrequentlyAskedQuestions.objects.all()
     serializer_class = FrequentlyAskedQuestionsSerializer
-    pagination_class = None
-
-
-class FrequentlyAskedQuestionsDetailView(generics.RetrieveAPIView):
-    queryset = FrequentlyAskedQuestions.objects.all()
-    serializer_class = FrequentlyAskedQuestionsSerializer
-    pagination_class = None
     lookup_field = 'pk'
 
 
@@ -63,16 +42,9 @@ class ContactListView(generics.ListCreateAPIView):
     serializer_class = ContactSerializer
 
 
-class BookmarksView(generics.ListAPIView):
+class BookmarksView(viewsets.ModelViewSet):
     queryset = Bookmarks.objects.all()
     serializer_class = BookmarksSerializer
-    pagination_class = None
-
-
-class BookmarksDetailView(generics.RetrieveAPIView):
-    queryset = Bookmarks.objects.all()
-    serializer_class = BookmarksSerializer
-    pagination_class = None
     lookup_field = 'pk'
 
 
@@ -92,12 +64,13 @@ class MenuViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class HomePageListView(generics.ListAPIView):
+class HomePageBannerViewSet(viewsets.ModelViewSet):
     queryset = HomePageBanner.objects.all()
     serializer_class = HomePageBannerSerializer
+    lookup_field = 'pk'
 
 
-class HomePageView(generics.RetrieveAPIView):
-    queryset = HomePageBanner.objects.all()
-    serializer_class = HomePageBannerSerializer
+class NdrmaViewSet(viewsets.ModelViewSet):
+    queryset = NdrmaPortals.objects.all()
+    serializer_class = NdrmaportalSerializer
     lookup_field = 'pk'

@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import PublicationDetailView, Allpublicationview
+from .views import PublicationViewSet
 
 urlpatterns = [
-    path('<slug:slug>/', PublicationDetailView.as_view(),
+    path('', PublicationViewSet.as_view({'get': 'list'}),
          name='publication_detail'),
-    path('', Allpublicationview.as_view(), name='all_publications'),
+    path('<slug:slug>/', PublicationViewSet.as_view(
+        {'get': 'retrieve'}), name='all_publications'),
 ]

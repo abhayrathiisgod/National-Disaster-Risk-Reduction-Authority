@@ -1,10 +1,11 @@
 from django.urls import path
-from pressnotenews.views import NewsInfoViewsetList, PressNoteAPIView, NewsInfoViewsetInstance, PressNoteListAPIView
+from pressnotenews.views import NewsInfoViewSet, PressNoteAPIView
 
 urlpatterns = [
-    path('newsinfo/', NewsInfoViewsetList.as_view()),
+    path('newsinfo/', NewsInfoViewSet.as_view({'get': 'list'})),
     path('newsinfo/<int:pk>/',
-         NewsInfoViewsetInstance.as_view()),
-    path('press-note/', PressNoteListAPIView.as_view()),
-    path('press-note/<int:pk>', PressNoteAPIView.as_view()),
+         NewsInfoViewSet.as_view({'get': 'retrieve'})),
+    path('press-note/', PressNoteAPIView.as_view({'get': 'list'})),
+    path('press-note/<int:pk>/',
+         PressNoteAPIView.as_view({'get': 'retrieve'})),
 ]

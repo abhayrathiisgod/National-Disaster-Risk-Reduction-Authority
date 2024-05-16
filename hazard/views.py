@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from hazard.models import Hazards
 from hazard.serializers import HazardSerializer
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 from .filters import HazardFilter
 
 
-class HazardList(generics.ListAPIView):
+class HazardAPIview(viewsets.ModelViewSet):
     queryset = Hazards.objects.all().order_by('order')
     serializer_class = HazardSerializer
     filter_backends = [filters.SearchFilter,
@@ -17,9 +17,4 @@ class HazardList(generics.ListAPIView):
     ordering_fields = ['id', 'title', 'order', 'color', 'type']
     pagination_class = LimitOffsetPagination
     filterset_class = HazardFilter
-
-
-class HazardInstance(generics.RetrieveAPIView):
-    queryset = Hazards.objects.all()
-    serializer_class = HazardSerializer
     lookup_field = 'pk'

@@ -54,7 +54,14 @@ class OfficerProfileSerializer(serializers.ModelSerializer):
                   'email', 'additional_info', 'additional_info_ne', 'image', 'from_date', 'to_date', 'order']
 
 
-class OfficerProfileforalertSerializer(serializers.Serializer):
+class OfficerProfileListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfficerProfile
+        fields = ['id', 'designation', 'departments', 'skills', 'trainings', 'name', 'name_ne', 'mobile',
+                  'email', 'additional_info', 'additional_info_ne', 'image', 'from_date', 'to_date', 'order']
+
+
+class OfficerProfileforalertSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfficerProfile
         fields = ['designation', 'name', 'name_ne', 'mobile',

@@ -13,9 +13,9 @@ class GuideCourse(models.Model):
     title = models.CharField(max_length=255)
     title_ne = models.CharField(max_length=255)
     description = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'description', config_name='extends', blank=True, null=True)
     description_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'description_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/guide_course')
 
     def __str__(self) -> str:
@@ -33,12 +33,6 @@ class GuideCourse(models.Model):
                 old_instance.image.delete(save=False)
 
         super(GuideCourse, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class Guidechildren(models.Model):

@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import GalleryView, GalleryDetailView, VideoGalleryView, VideoGalleryDetailView
+from .views import GalleryView, VideoGalleryView
 
 urlpatterns = [
-    path('photo-gallery/', GalleryView.as_view()),
-    path('photo-gallery/<int:pk>/', GalleryDetailView.as_view()),
-    path('video-gallery/', VideoGalleryView.as_view()),
-    path('video-gallery/<int:pk>/', VideoGalleryDetailView.as_view()),
-
+    path('photo-gallery/', GalleryView.as_view({'get': 'list'})),
+    path('photo-gallery/<int:pk>/', GalleryView.as_view({'get': 'retrieve'})),
+    path('video-gallery/', VideoGalleryView.as_view({'get': 'list'})),
+    path('video-gallery/<int:pk>/',
+         VideoGalleryView.as_view({'get': 'retrieve'})),
 ]

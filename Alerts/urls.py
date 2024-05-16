@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import AlertListView, AlertInstanceView
+from .views import AlertView
 
 urlpatterns = [
-    path('alerts/', AlertListView.as_view(), name='alert-list'),
-    path('alerts/<int:pk>/', AlertInstanceView.as_view(), name='alert-instance'),
+    path('alerts/', AlertView.as_view({'get': 'list'}), name='alert-list'),
+    path('alerts/<int:pk>/',
+         AlertView.as_view({'get': 'retrieve'}), name='alert-instance'),
 ]

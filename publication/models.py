@@ -1,16 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import FileExtensionValidator
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from PyPDF2 import PdfFileReader
-from pdf2image import convert_from_path
-from io import BytesIO
-from django.conf import settings
 from django_ckeditor_5.fields import CKEditor5Field
-from django.core.files.uploadedfile import InMemoryUploadedFile
-import os
-from django.utils.safestring import mark_safe
+import random
+import string
 
 
 class PublicationType(models.Model):
@@ -57,72 +50,34 @@ class PublicationAuthor(models.Model):
 
 
 class Publications(models.Model):
-    class Meta:
-        verbose_name = "Publication"
-        verbose_name_plural = "Publications"
     pub_type = models.ForeignKey(PublicationType, on_delete=models.PROTECT)
-    pub_author = models.ForeignKey(PublicationAuthor, on_delete=models.PROTECT)
+    pub_author = models.ForeignKey(
+        PublicationAuthor, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True, null=True)
     title_ne = models.CharField(max_length=255)
-    description = CKEditor5Field('Text', config_name='extends', default=' ')
-    description_ne = CKEditor5Field('Text', config_name='extends', default=' ')
-    summary = CKEditor5Field('Text', config_name='extends', default=' ')
-    summary_ne = CKEditor5Field('Text', config_name='extends', default=' ')
+    description = CKEditor5Field(
+        'Description', config_name='extends', default=' ')
+    description_ne = CKEditor5Field(
+        'Description_ne', config_name='extends', default=' ')
+    summary = CKEditor5Field('Summary', config_name='extends', default=' ')
+    summary_ne = CKEditor5Field(
+        'Summary_ne', config_name='extends', default=' ')
     date = models.DateField(default='')
     pdffile = models.FileField(
-        upload_to='uploads/publication/pdf', default=None)
+        upload_to='uploads/publication/pdf', default=None, validators=[
+            FileExtensionValidator(allowed_extensions=["pdf"])], blank=True, null=True)
     image = models.ImageField(upload_to='uploads/publication/image', validators=[
-        FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
-                                                   "png"])], blank=True, null=True)
+        FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png"])], blank=True, null=True)
     is_published = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.pdffile:
-            _, extension = os.path.splitext(self.pdffile.name)
-            self.file_extension = extension
-            if extension.lower() == '.pdf':
-                image_data = self.extract_first_page_as_image()
-                if image_data:
-                    self.image.save('first_page.jpg', image_data, save=False)
-        self.slug = slugify(self.title)
-        if self.pk:
-            old_instance = Publications.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-            if self.pdffile != old_instance.pdffile:
-                old_instance.pdffile.delete(save=False)
-
-        super(Publications, self).save(*args, **kwargs)
-    # change
-
-    def extract_first_page_as_image(self):
-        if self.pdffile:
-            images = convert_from_path(self.pdffile.path)
-            if images:
-                first_page_image = images[0]
-
-                img_io = BytesIO()
-                first_page_image.save(img_io, format='JPEG')
-                img_io.seek(0)
-
-                img_file = InMemoryUploadedFile(
-                    img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
-
-                return img_file
-
-        return None
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
+    def generate_unique_slug(self):
+        slug = slugify(self.title)
+        if Publications.objects.filter(slug=slug).exists():
+            random_chars = ''.join(random.choices(
+                string.ascii_letters + string.digits, k=4))
+            slug += f"-{random_chars}"
+        return slug

@@ -1,7 +1,7 @@
 from django.urls import path
-from hazard.views import HazardList, HazardInstance
+from hazard.views import HazardAPIview
 
 urlpatterns = [
-    path('hazard/', HazardList.as_view()),
-    path('hazard/<int:pk>/', HazardInstance.as_view()),
+    path('hazard/',  HazardAPIview.as_view({'get': 'list'})),
+    path('hazard/<int:pk>/', HazardAPIview.as_view({'get': 'retrieve'})),
 ]
