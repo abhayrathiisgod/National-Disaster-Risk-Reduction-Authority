@@ -75,6 +75,7 @@ class VideoGallery(models.Model):
     class Meta:
         verbose_name = "Video Gallery"
         verbose_name_plural = "Video Galleries"
+
     youtube_url = models.URLField()
 
     def __str__(self) -> str:

@@ -70,6 +70,14 @@ class Bulletin(models.Model):
             if self.file != old_instance.file:
                 old_instance.file.delete(save=False)
         super().save(*args, **kwargs)
+        # if self.file:
+        #     _, extension = os.path.splitext(self.file.name)
+        #     self.file_extension = extension
+        #     if extension.lower() == '.pdf':
+        #         image_data = self.extract_first_page_as_image()
+        #         if image_data:
+        #             self.image.save('first_page.jpg', image_data, save=False)
+
         if self.file:
             _, extension = os.path.splitext(self.file.name)
             self.file_extension = extension
@@ -91,21 +99,38 @@ class Bulletin(models.Model):
 
     # overwrite
 
+    # def extract_first_page_as_image(self):
+    #     if self.file:
+    #         images = convert_from_path(self.file.path)
+    #         if images:
+    #             first_page_image = images[0]
+
+    #             img_io = BytesIO()
+    #             first_page_image.save(img_io, format='JPEG')
+    #             img_io.seek(0)
+
+    #             img_file = InMemoryUploadedFile(
+    #                 img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
+
+    #             return img_file
+
+    #     return None
+
     def extract_first_page_as_image(self):
         if self.file:
-            images = convert_from_path(self.file.path)
-            if images:
-                first_page_image = images[0]
+            _, extension = os.path.splitext(self.file.name)
+            if extension.lower() == '.pdf':
+                with fitz.open(self.file.path) as pdf:
+                    if pdf.page_count > 0:
+                        first_page = pdf.load_page(0)
+                        image_data, _, info = first_page.get_image_data(
+                            matrix=fitz.Matrix())  # Use get_image_data
 
-                img_io = BytesIO()
-                first_page_image.save(img_io, format='JPEG')
-                img_io.seek(0)
-
-                img_file = InMemoryUploadedFile(
-                    img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
-
-                return img_file
-
+                        img_io = BytesIO(image_data)
+                        img_io.seek(0)
+                        img_file = InMemoryUploadedFile(
+                            img_io, None, 'first_page.jpg', info['mimetype'], img_io.tell(), None)
+                        return img_file
         return None
 
     def __str__(self) -> str:
