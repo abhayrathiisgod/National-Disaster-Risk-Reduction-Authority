@@ -50,11 +50,14 @@ class Bulletin(models.Model):
     image = models.ImageField(upload_to='uploads/bulletin/files/', validators=[
                               FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                                          "png"])], blank=True, null=True)
+    # overwrite
 
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)
         self.file.delete(save=False)
         super().delete(*args, **kwargs)
+
+    # overwrite
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -76,6 +79,8 @@ class Bulletin(models.Model):
                     self.image.save('first_page.jpg', image_data, save=False)
         super(Bulletin, self).save(*args, **kwargs)
 
+    # overwrite
+
     def generate_unique_slug(self):
         slug = slugify(self.title)
         if Bulletin.objects.filter(slug=slug).exists():
@@ -83,6 +88,8 @@ class Bulletin(models.Model):
                 string.ascii_letters + string.digits, k=4))
             slug += f"-{random_chars}"
         return slug
+
+    # overwrite
 
     def extract_first_page_as_image(self):
         if self.file:
@@ -103,9 +110,3 @@ class Bulletin(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
