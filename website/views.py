@@ -4,6 +4,7 @@ from rest_framework import generics
 from .models import Page, Introduction, NdrmaPortals, ContactForm, ContactDetail, WardDocument, FrequentlyAskedQuestions, Bookmarks, Menu, HomePageBanner
 from .serializers import PageSerializer, NdrmaportalSerializer, ContactSerializer, IntroductionSerializer, ContactDetailSerializer, WardDocumentSerializer, FrequentlyAskedQuestionsSerializer, HomePageBannerSerializer, BookmarksSerializer, MenuSerializer
 from rest_framework.response import Response
+from rest_framework import filters
 # Create your views here.
 
 
@@ -29,12 +30,15 @@ class FrequentlyAskedQuestionsView(viewsets.ModelViewSet):
     queryset = FrequentlyAskedQuestions.objects.all()
     serializer_class = FrequentlyAskedQuestionsSerializer
     lookup_field = 'pk'
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['question']
 
 
-class PageView(generics.ListAPIView):
+class PageView(viewsets.ModelViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     pagination_class = None
+    lookup_field = 'slug'
 
 
 class ContactListView(generics.ListCreateAPIView):

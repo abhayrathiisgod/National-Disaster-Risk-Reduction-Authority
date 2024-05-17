@@ -20,7 +20,6 @@ class BulletinAuthorAdmin(admin.ModelAdmin):
 
 
 class BulletinAdmin(admin.ModelAdmin):
-    actions = None
 
     list_display = ('bulletin_author', 'bulletin_type', 'title', 'date')
     list_display_links = ('bulletin_author', 'bulletin_type', 'title', 'date')

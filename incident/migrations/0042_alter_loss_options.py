@@ -6,6 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
     dependencies = [
         ("incident", "0041_alter_incident_createdon_alter_incident_modifiedon"),
+
     ]
 
     operations = [

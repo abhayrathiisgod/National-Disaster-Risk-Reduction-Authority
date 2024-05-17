@@ -5,7 +5,7 @@ from pressnotenews.models import NewsInfo, Author, Type, PressNote
 class ALLNewsInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsInfo
-        fields = ['id', 'title', 'title_ne',
+        fields = ['id', 'title', 'title_ne', 'slug',
                   'summary', 'summary_ne', 'date', 'image']
 
 
@@ -27,11 +27,19 @@ class TypeSerializer(serializers.ModelSerializer):
         fields = ['Type_id', 'name', 'name_ne']
 
 
-class PressNoteSerializer(serializers.ModelSerializer):
+class PressNoteListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PressNote
+        fields = ['id', 'title', 'title_ne', 'slug',
+                  'summary', 'summary_ne', 'date', 'image', 'is_published']
+
+
+class PressNoteDetailSerializer(serializers.ModelSerializer):
     author_details = AuthorSerializer(source='author', read_only=True)
     type_details = TypeSerializer(source='type', read_only=True)
 
     class Meta:
         model = PressNote
-        fields = ['id', 'title', 'title_ne', 'description', 'description_ne',
+        fields = ['id', 'title', 'title_ne', 'slug', 'description', 'description_ne',
                   'summary', 'summary_ne', 'date', 'image', 'file', 'is_published', 'author_details', 'type_details']

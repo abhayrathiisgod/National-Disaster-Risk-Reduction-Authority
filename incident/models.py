@@ -64,19 +64,19 @@ class Incident(models.Model):
     modifiedOn = models.DateTimeField()
     titleNe = models.CharField(max_length=255)
     description = CKEditor5Field(
-        'Text', config_name='extends', null=True, blank=True)
+        'Description', config_name='extends', null=True, blank=True)
     cause = CKEditor5Field(
-        'Text', config_name='extends', null=True, blank=True)
+        'Cause', config_name='extends', null=True, blank=True)
     verified = models.BooleanField(default=False)
     verificationMessage = CKEditor5Field(
-        'Text', config_name='extends', null=True, blank=True)
+        'Verification Mesage', config_name='extends', null=True, blank=True)
     approved = models.BooleanField(default=False)
     polygon = models.CharField(max_length=255, null=True, blank=True)
     incidentOn = models.DateTimeField()
     reportedOn = models.DateTimeField()
     streetAddress = models.CharField(max_length=255)
     detail = CKEditor5Field(
-        'Text', config_name='extends', null=True, blank=True)
+        'Detail', config_name='extends', null=True, blank=True)
     needFollowup = models.BooleanField(default=False)
     region = models.CharField(max_length=255, null=True, blank=True)
     regionId = models.IntegerField(null=True, blank=True)

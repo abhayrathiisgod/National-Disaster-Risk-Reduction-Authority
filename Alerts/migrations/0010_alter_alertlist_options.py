@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name="alertlist",
-            options={"verbose_name": "Alert", "verbose_name_plural": "Alert List"},
+            options={"verbose_name": "Alert",
+                     "verbose_name_plural": "Alert List"},
         ),
     ]

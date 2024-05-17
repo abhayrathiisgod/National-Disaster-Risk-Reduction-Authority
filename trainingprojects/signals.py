@@ -1,8 +1,9 @@
 from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
 from django.dispatch import receiver
-from .models import Donater, Project
+from .models import Donater, Project, GeoHazardAssessment
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
 
 
 @receiver(pre_save, sender=Donater)
@@ -36,3 +37,21 @@ def delete_old_icon(sender, instance, **kwargs):
 def delete_icon(sender, instance, **kwargs):
     if instance.icon:
         instance.icon.delete(save=False)
+
+
+@receiver(pre_delete, sender=GeoHazardAssessment)
+def delete_publication_files(sender, instance, **kwargs):
+    if instance.file and instance.file.name:
+        if instance.file.storage == default_storage:
+            try:
+                default_storage.delete(instance.file.name)
+            except FileNotFoundError:
+                pass
+
+
+@receiver(pre_save, sender=GeoHazardAssessment)
+def update_publication_files(sender, instance, **kwargs):
+    if instance.pk:
+        old_instance = GeoHazardAssessment.objects.get(pk=instance.pk)
+        if instance.file != old_instance.file:
+            old_instance.file.delete(save=False)

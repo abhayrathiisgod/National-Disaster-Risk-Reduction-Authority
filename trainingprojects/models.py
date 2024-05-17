@@ -49,7 +49,12 @@ class Project(models.Model):
         User, on_delete=models.PROTECT, related_name='created_projects')
     updated_by = models.ForeignKey(
         User, on_delete=models.PROTECT, blank=True, null=True, related_name='updated_projects')
-    district = models.ForeignKey(District, on_delete=models.PROTECT)
+    province = models.ForeignKey(
+        Province, on_delete=models.PROTECT, blank=True, null=True)
+    district = models.ForeignKey(
+        District, on_delete=models.PROTECT, blank=True, null=True)
+    municipality = models.ForeignKey(
+        Municipality, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
@@ -62,9 +67,32 @@ class Training(models.Model):
     startDate = models.DateField(blank=True, null=True)
     endDate = models.DateField(blank=True, null=True)
     num_of_participants = models.IntegerField()
-    description = CKEditor5Field('Text', config_name='extends')
-    description = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('Description', config_name='extends')
+    description = CKEditor5Field('Description_ne', config_name='extends')
     attendants = models.CharField(max_length=255, blank=True, null=True)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT)
+    district = models.ForeignKey(District, on_delete=models.PROTECT)
+    municipality = models.ForeignKey(
+        Municipality, on_delete=models.PROTECT, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class fiscal(models.Model):
+    year = models.CharField(max_length=255)
+    year_ne = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.year
+
+
+class GeoHazardAssessment(models.Model):
+    fiscal_year = models.ForeignKey(fiscal, on_delete=models.PROTECT)
+    title = models.CharField(max_length=255)
+    title_ne = models.CharField(max_length=255)
+    file = models.FileField(blank=True, null=True,
+                            upload_to='uploads/geohazardassessment/')
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     district = models.ForeignKey(District, on_delete=models.PROTECT)
     municipality = models.ForeignKey(

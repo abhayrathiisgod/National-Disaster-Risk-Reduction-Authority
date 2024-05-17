@@ -7,6 +7,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
     dependencies = [
         ("nationalbipadalerts", "0004_alter_bipadalerts_options_and_more"),
+
     ]
 
     operations = [

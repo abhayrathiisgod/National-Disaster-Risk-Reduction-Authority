@@ -1,5 +1,6 @@
 from django.contrib import admin
 from importantcontacts.models import MohaPhoneDirectoryList, ProvinceWiseFocalPersonContactList, DeocHeadList, LocalDisasterManagementContactList, MohaSubordinateList, SnakeBites, EmergencyVehicle
+from django.contrib.admin.options import TabularInline
 
 
 class ProvinceWiseFocalPersonContactListAdmin(admin.ModelAdmin):

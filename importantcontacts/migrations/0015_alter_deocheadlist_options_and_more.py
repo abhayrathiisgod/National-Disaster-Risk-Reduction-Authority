@@ -8,7 +8,9 @@ class Migration(migrations.Migration):
         (
             "importantcontacts",
             "0014_alter_deocheadlist_id_alter_emergencyvehicle_id_and_more",
+
         ),
+
     ]
 
     operations = [

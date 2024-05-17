@@ -1,5 +1,8 @@
-from pathlib import Path
 import os
+from pathlib import Path
+import django
+django.setup()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,7 +37,6 @@ INSTALLED_APPS = [
     'django_filters',
     'profiles',
     'nationalbipadalerts',
-    'pdf2image',
     'django_ckeditor_5',
 ]
 

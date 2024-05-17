@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Address, Donater, Project, Training
-from federal.serializers import DistrictSerializer
+from .models import Address, Donater, Project, Training, GeoHazardAssessment, fiscal
+from federal.serializers import DistrictSerializer, MunicipalityySerializer, ProvinceSerializer
 from datetime import date
 
 
@@ -18,19 +18,17 @@ class DonaterSerializer(serializers.ModelSerializer):
 
 class ProjectListSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
-    # donor = DonaterSerializer()
     district = DistrictSerializer()
 
     class Meta:
         model = Project
-        fields = ['id', 'address', 'created_at', 'updated_at', 'title', 'title_ne',
-                  'budget', 'budget_ne', 'start_date', 'end_date', 'created_by', 'updated_by', 'district']
+        fields = ['id', 'address', 'title', 'title_ne',
+                  'start_date', 'end_date', 'created_by', 'district']
 
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     donor = DonaterSerializer()
-    district = DistrictSerializer()
 
     class Meta:
         model = Project
@@ -38,7 +36,18 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
                   'budget', 'budget_ne', 'start_date', 'end_date', 'created_by', 'updated_by', 'district']
 
 
+class TrainingListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Training
+        fields = ['id', 'address', 'title', 'title_ne',
+                  'startDate', 'endDate']
+
+
 class TrainingSerializer(serializers.ModelSerializer):
+    province = ProvinceSerializer()
+    municipality = MunicipalityySerializer()
+    district = DistrictSerializer()
+
     class Meta:
         model = Training
         fields = '__all__'
@@ -67,3 +76,17 @@ class TrainingAnalyticsSerializer(serializers.Serializer):
 
     def get_municipality_covered(self, obj):
         return Training.objects.exclude(municipality__isnull=True).count()
+
+
+class fiscalserializer(serializers.ModelSerializer):
+    class Meta:
+        model = fiscal
+        fields = '__all__'
+
+
+class GeoHazardAssessmentSerializer(serializers.ModelSerializer):
+    fiscal_year = fiscalserializer()
+
+    class Meta:
+        model = GeoHazardAssessment
+        fields = '__all__'

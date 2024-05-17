@@ -1,6 +1,9 @@
 from django.apps import AppConfig
+from bulletin.models import Bulletin
 
 
-class BulletinConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
+class YourAppConfig(AppConfig):
     name = 'bulletin'
+
+    def ready(self):
+        import bulletin.signals

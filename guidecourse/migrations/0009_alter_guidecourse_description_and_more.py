@@ -9,7 +9,9 @@ class Migration(migrations.Migration):
         (
             "guidecourse",
             "0008_alter_guidecourse_options_alter_course_description_and_more",
+
         ),
+
     ]
 
     operations = [

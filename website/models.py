@@ -1,14 +1,8 @@
 from django.db import models
 from publication.models import Publications
-import os
 from django.core.validators import FileExtensionValidator
 from django_ckeditor_5.fields import CKEditor5Field
-from pdf2image import convert_from_path
 from django.db import models
-from io import BytesIO
-from PIL import Image
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.utils.safestring import mark_safe
 
 
 class ContactDetail(models.Model):
@@ -23,8 +17,8 @@ class ContactDetail(models.Model):
 
 
 class Introduction(models.Model):
-    title = CKEditor5Field('title', config_name='extends')
-    title_ne = CKEditor5Field('title_ne', config_name='extends')
+    title = models.CharField(max_length=255)
+    title_ne = models.CharField(max_length=255)
     description = CKEditor5Field('description_ne', config_name='extends')
     description_ne = CKEditor5Field('description_ne', config_name='extends')
     sub_title = CKEditor5Field('subtitle', config_name='extends')
@@ -47,12 +41,6 @@ class WardDocument(models.Model):
     def __str__(self):
         return self.filename
 
-    def delete(self, *args, **kwargs):
-        if self.image:
-            self.image.delete(save=False)
-        self.document.delete(save=False)
-        super().delete(*args, **kwargs)
-
 
 class FrequentlyAskedQuestions(models.Model):
     class Meta:
@@ -68,15 +56,15 @@ class FrequentlyAskedQuestions(models.Model):
 
 
 class Page(models.Model):
-    title = CKEditor5Field('title', config_name='extends')
-    title_ne = CKEditor5Field('title_ne', config_name='extends')
+    title = models.CharField(max_length=255)
+    title_ne = models.CharField(max_length=255)
     featured_image = models.ImageField(
         upload_to='uploads/page/featured_image', null=True, blank=True, validators=[
             FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                        "png"])])
     description = CKEditor5Field('description', config_name='extends')
     description_ne = CKEditor5Field('description_ne', config_name='extends')
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
@@ -127,18 +115,6 @@ class HomePageBanner(models.Model):
     image = models.ImageField(upload_to='uploads/homepage/banner', validators=[
                               FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                                          "png"])])
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_instance = HomePageBanner.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(HomePageBanner, self).save(*args, **kwargs)
 
 
 class NdrmaPortals(models.Model):

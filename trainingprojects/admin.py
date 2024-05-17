@@ -1,11 +1,67 @@
 from django.contrib import admin
-from .models import Address, Donater, Project, Training
+from .models import Address, Donater, Project, Training, fiscal, GeoHazardAssessment
 
 
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('id', 'local_address', 'local_address_ne')
     list_display_links = ('id', 'local_address', 'local_address_ne')
     search_fields = ('local_address',)
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_change_permission(self, request, obj=None) -> bool:
+        if request.user.is_superuser:
+            return True
+        return False
+
+
+class fiscalAdmin(admin.ModelAdmin):
+    list_display = ('id', 'year', 'year_ne')
+    list_display_links = ('id', 'year', 'year_ne')
+    search_fields = ('year',)
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_change_permission(self, request, obj=None) -> bool:
+        if request.user.is_superuser:
+            return True
+        return False
+
+
+class GeoHazardAssessmentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'fiscal_year', 'title')
+    list_display_links = ('id', 'fiscal_year', 'title')
+    search_fields = ('title',)
+    list_filter = ('province', 'district')
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(GeoHazardAssessmentAdmin, self).get_form(
+            request, obj, **kwargs)
+
+        address_field = form.base_fields.get("fiscal_year")
+        if address_field:
+            address_field.widget.can_add_related = True
+            address_field.widget.can_change_related = False
+            address_field.widget.can_delete_related = False
+            address_field.widget.can_view_related = False
+
+        return form
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -131,3 +187,5 @@ admin.site.register(Address, AddressAdmin)
 admin.site.register(Donater, DonaterAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Training, TrainingAdmin)
+admin.site.register(fiscal, fiscalAdmin)
+admin.site.register(GeoHazardAssessment, GeoHazardAssessmentAdmin)

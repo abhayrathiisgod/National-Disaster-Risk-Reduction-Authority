@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.safestring import mark_safe
-# Create your models here.
 
 
 class Skills(models.Model):
@@ -61,8 +60,8 @@ class Trainings(models.Model):
     training_certificate = models.ManyToManyField(TrainingCertificate)
     title = models.TextField(max_length=255, unique=True)
     title_ne = models.TextField(max_length=255)
-    description = CKEditor5Field('Text', config_name='extends')
-    description_ne = CKEditor5Field('Text', config_name='extends')
+    description = CKEditor5Field('description', config_name='extends')
+    description_ne = CKEditor5Field('description_ne', config_name='extends')
     start_date = models.DateField()
     end_date = models.DateField()
 
@@ -80,10 +79,11 @@ class OfficerProfile(models.Model):
     trainings = models.ManyToManyField(Trainings, blank=True)
     name = models.CharField(max_length=100, unique=True)
     name_ne = models.CharField(max_length=100)
-    mobile = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=255)
     email = models.EmailField()
-    additional_info = CKEditor5Field('Text', config_name='extends')
-    additional_info_ne = CKEditor5Field('Text', config_name='extends')
+    additional_info = CKEditor5Field('additional_info', config_name='extends')
+    additional_info_ne = CKEditor5Field(
+        'additional_info_ne', config_name='extends')
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -94,25 +94,6 @@ class OfficerProfile(models.Model):
     def __str__(self):
         return self.name
 
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = OfficerProfile.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(OfficerProfile, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
-
 
 class CommiteProfile(models.Model):
     class Meta:
@@ -122,9 +103,9 @@ class CommiteProfile(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -132,25 +113,6 @@ class CommiteProfile(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = CommiteProfile.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(CommiteProfile, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class NationalCouncilHead(models.Model):
@@ -161,9 +123,9 @@ class NationalCouncilHead(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -171,25 +133,6 @@ class NationalCouncilHead(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = NationalCouncilHead.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(NationalCouncilHead, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class ExecutiveCommitteHead(models.Model):
@@ -200,9 +143,9 @@ class ExecutiveCommitteHead(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -210,25 +153,6 @@ class ExecutiveCommitteHead(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = ExecutiveCommitteHead.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(ExecutiveCommitteHead, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class OfficersHead(models.Model):
@@ -239,9 +163,9 @@ class OfficersHead(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -249,25 +173,6 @@ class OfficersHead(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = OfficersHead.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(OfficersHead, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class OfficersSpokesPerson(models.Model):
@@ -278,9 +183,9 @@ class OfficersSpokesPerson(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -288,25 +193,6 @@ class OfficersSpokesPerson(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = OfficersSpokesPerson.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(OfficersSpokesPerson, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'
 
 
 class InformationOfficer(models.Model):
@@ -317,9 +203,9 @@ class InformationOfficer(models.Model):
     name = models.CharField(max_length=100)
     name_ne = models.CharField(max_length=100)
     additional_info = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info', config_name='extends', blank=True, null=True)
     additional_info_ne = CKEditor5Field(
-        'Text', config_name='extends', blank=True, null=True)
+        'additional_info_ne', config_name='extends', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/profiles/prof', validators=[
         FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
                                                    "png"])])
@@ -327,22 +213,3 @@ class InformationOfficer(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-
-        if self.pk:
-            old_instance = InformationOfficer.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-
-        super(InformationOfficer, self).save(*args, **kwargs)
-
-    def image_preview(self):
-        if self.image:
-            return mark_safe('<img src="{0}" width="250" height="250" />'.format(self.image.url))
-        else:
-            return '(No image)'

@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from .views import PageView, NdrmaViewSet, HomePageBannerViewSet, ContactListView, FrequentlyAskedQuestionsView, WardDocumentView, ContactDetailView, IntroductionView, BookmarksView, MenuViewSet
 urlpatterns = [
-    path('pages/national-platform-of-disaster-risk-re/', PageView.as_view()),
+    path('pages/', PageView.as_view({'get': 'list'})),
+    path('pages/<slug:slug>/', PageView.as_view({'get': 'retrieve'})),
     path('faq/', FrequentlyAskedQuestionsView.as_view({'get': 'list'})),
     path('faq/<int:pk>/',
          FrequentlyAskedQuestionsView.as_view({'get': 'retrieve'})),

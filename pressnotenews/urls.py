@@ -3,9 +3,9 @@ from pressnotenews.views import NewsInfoViewSet, PressNoteAPIView
 
 urlpatterns = [
     path('newsinfo/', NewsInfoViewSet.as_view({'get': 'list'})),
-    path('newsinfo/<int:pk>/',
+    path('newsinfo/<slug:slug>/',
          NewsInfoViewSet.as_view({'get': 'retrieve'})),
     path('press-note/', PressNoteAPIView.as_view({'get': 'list'})),
-    path('press-note/<int:pk>/',
+    path('press-note/<slug:slug>/',
          PressNoteAPIView.as_view({'get': 'retrieve'})),
 ]

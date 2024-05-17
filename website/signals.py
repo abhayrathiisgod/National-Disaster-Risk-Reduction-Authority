@@ -5,6 +5,9 @@ from pdf2image import convert_from_path
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
+import string
+import random
+from django.utils.text import slugify
 
 
 @receiver(pre_save, sender=WardDocument)
@@ -47,6 +50,8 @@ def delete_document_image(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Page)
 def delete_old_featured_image(sender, instance, **kwargs):
+    if not instance.slug or Page.objects.filter(slug=instance.slug).exists():
+        instance.slug = generate_unique_slug(instance.title)
     if instance.pk:
         try:
             old_instance = Page.objects.get(pk=instance.pk)
@@ -58,6 +63,7 @@ def delete_old_featured_image(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=Page)
 def delete_featured_image(sender, instance, **kwargs):
+
     if instance.featured_image:
         instance.featured_image.delete(save=False)
 
@@ -94,3 +100,13 @@ def delete_old_image(sender, instance, **kwargs):
 def delete_image(sender, instance, **kwargs):
     if instance.image:
         instance.image.delete(save=False)
+
+
+def generate_unique_slug(title):
+    slug = slugify(title)
+    model = Page
+    if model.objects.filter(slug=slug).exists():
+        random_chars = ''.join(random.choices(
+            string.ascii_letters + string.digits, k=4))
+        slug += f"-{random_chars}"
+    return slug

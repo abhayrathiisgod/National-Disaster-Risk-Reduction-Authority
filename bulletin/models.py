@@ -3,12 +3,10 @@ import os
 from django.core.validators import FileExtensionValidator
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
-from pdf2image import convert_from_path
-from django.utils.safestring import mark_safe
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 import random
 import string
+from django.core.files.uploadedfile import InMemoryUploadedFile
 import fitz
 
 
@@ -35,8 +33,7 @@ def get_upload_path_bulletin(instance, filename):
 class Bulletin(models.Model):
     bulletin_author = models.ForeignKey(
         BulletinAuthor, on_delete=models.PROTECT)
-    bulletin_type = models.ForeignKey(
-        BulletinType, on_delete=models.PROTECT)
+    bulletin_type = models.ForeignKey(BulletinType, on_delete=models.PROTECT)
     title = models.TextField()
     slug = models.SlugField(unique=True, blank=True, null=True)
     title_ne = models.TextField()
@@ -48,46 +45,7 @@ class Bulletin(models.Model):
     file = models.FileField(upload_to='uploads/bulletin/files/',
                             validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
     image = models.ImageField(upload_to='uploads/bulletin/files/', validators=[
-                              FileExtensionValidator(allowed_extensions=["jpg", "jpeg",
-                                                                         "png"])], blank=True, null=True)
-    # overwrite
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        self.file.delete(save=False)
-        super().delete(*args, **kwargs)
-
-    # overwrite
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        if not self.slug or Bulletin.objects.filter(slug=self.slug).exists():
-            self.slug = self.generate_unique_slug()
-        if self.pk:
-            old_instance = Bulletin.objects.get(pk=self.pk)
-            if self.image != old_instance.image:
-                old_instance.image.delete(save=False)
-            if self.file != old_instance.file:
-                old_instance.file.delete(save=False)
-        super().save(*args, **kwargs)
-        # if self.file:
-        #     _, extension = os.path.splitext(self.file.name)
-        #     self.file_extension = extension
-        #     if extension.lower() == '.pdf':
-        #         image_data = self.extract_first_page_as_image()
-        #         if image_data:
-        #             self.image.save('first_page.jpg', image_data, save=False)
-
-        if self.file:
-            _, extension = os.path.splitext(self.file.name)
-            self.file_extension = extension
-            if extension.lower() == '.pdf':
-                image_data = self.extract_first_page_as_image()
-                if image_data:
-                    self.image.save('first_page.jpg', image_data, save=False)
-        super(Bulletin, self).save(*args, **kwargs)
-
-    # overwrite
+                              FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png"])], blank=True, null=True)
 
     def generate_unique_slug(self):
         slug = slugify(self.title)
@@ -97,25 +55,6 @@ class Bulletin(models.Model):
             slug += f"-{random_chars}"
         return slug
 
-    # overwrite
-
-    # def extract_first_page_as_image(self):
-    #     if self.file:
-    #         images = convert_from_path(self.file.path)
-    #         if images:
-    #             first_page_image = images[0]
-
-    #             img_io = BytesIO()
-    #             first_page_image.save(img_io, format='JPEG')
-    #             img_io.seek(0)
-
-    #             img_file = InMemoryUploadedFile(
-    #                 img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
-
-    #             return img_file
-
-    #     return None
-
     def extract_first_page_as_image(self):
         if self.file:
             _, extension = os.path.splitext(self.file.name)
@@ -123,13 +62,12 @@ class Bulletin(models.Model):
                 with fitz.open(self.file.path) as pdf:
                     if pdf.page_count > 0:
                         first_page = pdf.load_page(0)
-                        image_data, _, info = first_page.get_image_data(
-                            matrix=fitz.Matrix())  # Use get_image_data
-
-                        img_io = BytesIO(image_data)
+                        pix = first_page.get_pixmap()
+                        img_data = pix.tobytes("jpeg")
+                        img_io = BytesIO(img_data)
                         img_io.seek(0)
                         img_file = InMemoryUploadedFile(
-                            img_io, None, 'first_page.jpg', info['mimetype'], img_io.tell(), None)
+                            img_io, None, 'first_page.jpg', 'image/jpeg', img_io.tell(), None)
                         return img_file
         return None
 

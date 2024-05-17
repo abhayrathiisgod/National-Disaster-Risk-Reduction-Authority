@@ -41,11 +41,11 @@ class TypeAdmin(admin.ModelAdmin):
 
 
 class NewsInfoAdmin(admin.ModelAdmin):
-    actions = None
     list_display = ('id', 'title', 'date')
     list_display_links = ('id', 'title', 'date')
     search_fields = ('title', 'description', 'summary')
     list_filter = ('id', 'date',)
+    readonly_fields = ('slug',)
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -64,12 +64,12 @@ class NewsInfoAdmin(admin.ModelAdmin):
 
 
 class PressNoteAdmin(admin.ModelAdmin):
-    actions = None
     list_display = ('id', 'author', 'type', 'title', 'date', 'is_published')
     list_display_links = ('id', 'author', 'type',
                           'title', 'date', 'is_published')
     search_fields = ('title', 'description', 'summary')
     list_filter = ('author', 'type', 'date', 'is_published')
+    readonly_fields = ('slug', 'image')
 
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser:

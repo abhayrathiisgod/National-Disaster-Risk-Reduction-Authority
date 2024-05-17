@@ -6,12 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
     dependencies = [
         ("federal", "0005_alter_district_id_alter_municipality_id_and_more"),
+
     ]
 
     operations = [
         migrations.AlterModelOptions(
             name="district",
-            options={"verbose_name": "District", "verbose_name_plural": "Districts"},
+            options={"verbose_name": "District",
+                     "verbose_name_plural": "Districts"},
         ),
         migrations.AlterModelOptions(
             name="municipality",
@@ -22,6 +24,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name="province",
-            options={"verbose_name": "Province", "verbose_name_plural": "Provinces"},
+            options={"verbose_name": "Province",
+                     "verbose_name_plural": "Provinces"},
         ),
     ]
